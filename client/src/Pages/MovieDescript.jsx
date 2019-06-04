@@ -20,6 +20,7 @@ class MovieDescript extends React.Component {
     this.state = {
       reviews: [],
       movies: [],
+      showtimes: [],
     };
 
     this.getReviews = this.getReviews.bind(this);
@@ -102,8 +103,10 @@ class MovieDescript extends React.Component {
         console.error(error);
       });
   }
-
-
+  //create function that triggers post request to store showtimes in database
+    //axios.post to endpoint
+      //get request to database
+        //re set showtimes state to showtimes retrieved from database
   // show detailed info about movie and reviews about movie
   render() {
     const appStyle = {
