@@ -32,6 +32,8 @@ class MovieDescript extends React.Component {
       reviews: [],
       movies: [],
       showtimes: [],
+      date: '',
+      zip: '',
     };
 
     this.getReviews = this.getReviews.bind(this);
