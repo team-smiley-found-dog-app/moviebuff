@@ -151,7 +151,7 @@ class MovieDescript extends React.Component {
    
 
     const { movie } = this.props;
-
+    const { date, zip } = this.state;
     return (
       <div>
         <Media query="(max-width: 400px)">
@@ -222,11 +222,14 @@ class MovieDescript extends React.Component {
                       <Button style={btnStyle} onClick={this.downvote} variant="contained" color="primary">Downvote</Button>
                       <Button style={btnStyle} onClick={this.addToList} variant="contained" color="primary">Add to Watchlist</Button>
                     </Box>
-                    <FormControl>
-                      <InputLabel htmlFor="my-input">Email address</InputLabel>
-                      <Input id="my-input" aria-describedby="my-helper-text" />
-                      <Button style={btnStyle} variant="contained" color="primary">Find Showtimes</Button>
-                    </FormControl>
+                    <Box m={2} display="flex" flexDirection="row">
+                      <Box m={1}>
+                        <Button onClick={this.handleSubmit} variant="contained" color="primary" type="submit" value="Search">Find Showtimes</Button>
+                      </Box>
+                      <br/>
+                      <input type="text" value={date} onChange={this.handleChange} />
+                      <input type="text" value={zip} onChange={this.handleChange} />
+                    </Box>
                     <br />
                     <Video movie={movie} />
                     <ReviewList reviews={this.state.reviews} />
