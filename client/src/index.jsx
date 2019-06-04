@@ -13,7 +13,7 @@ import Main from './Pages/Main.jsx';
 // import SearchResults from './Pages/SearchResults.jsx';
 
 //firebase imports
-import firebase, { auth, provider } from '../../firebaseConfig.js';
+import firebase, { auth, provider } from '../firebaseConfig.js';
 
 class App extends React.Component {
   constructor(props) {

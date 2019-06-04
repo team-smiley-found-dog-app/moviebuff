@@ -26,7 +26,7 @@ class Main extends React.Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.viewWatchlist = this.viewWatchlist.bind(this);
-    this.goHome = this.goHome.bind(this);
+    this.goHome = this.goHome.bind(this);//
   }
 
   // handle request for movies playing in theatres now

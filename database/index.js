@@ -12,7 +12,7 @@ sequelize.authenticate()
 
 // sequelize.sync({
 //   force: true, // Drops info in database for testing 
-// })
+// });
 
 const User = sequelize.define('user', { // model schema for user -- lowercase for psql. 
   username: Sequelize.STRING,
