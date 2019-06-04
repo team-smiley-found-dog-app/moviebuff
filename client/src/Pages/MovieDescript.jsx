@@ -41,6 +41,7 @@ class MovieDescript extends React.Component {
     this.addToList = this.addToList.bind(this);
     this.upvote = this.upvote.bind(this);
     this.downvote = this.downvote.bind(this);
+    this.handleDate = this.handleDate.bind(this);
   }
 
   // handle getting reviews for a movie when it is clicked
@@ -55,7 +56,11 @@ class MovieDescript extends React.Component {
         console.error(error);
       });
     }
-    
+    handleDate(e) {
+      this.setState({
+        date: e.target.value
+      })
+    }
 
   // when this component is rendered, get reviews
   componentDidMount(e) {
@@ -70,7 +75,7 @@ class MovieDescript extends React.Component {
         console.error(error);
       });
   }
-
+  
   handleVote(vote) {
     const { movie } = this.props;
     return axios.put('/votes', {
@@ -227,7 +232,7 @@ class MovieDescript extends React.Component {
                         <Button onClick={this.handleSubmit} variant="contained" color="primary" type="submit" value="Search">Find Showtimes</Button>
                       </Box>
                       <br/>
-                      <input type="text" value={date} onChange={this.handleChange} />
+                      <input type="text" value={date} onChange={this.handleDate} />
                       <input type="text" value={zip} onChange={this.handleChange} />
                     </Box>
                     <br />
