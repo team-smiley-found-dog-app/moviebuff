@@ -6,13 +6,13 @@ import axios from 'axios';
 // import { Route, Switch } from 'react-router-dom';
 // import { BrowserRouter } from 'react-router-dom';
 // import '../App.css';
-import LoginCard from './Components/LoginCard.jsx'
+import LoginCard from './Components/LoginCard.jsx';
 import Main from './Pages/Main.jsx';
 // import MovieDescript from './Pages/MovieDescript.jsx';
 // import UserAccount from './Pages/UserAccount.jsx';
 // import SearchResults from './Pages/SearchResults.jsx';
 
-//firebase imports
+// firebase imports
 import firebase, { auth, provider } from '../firebaseConfig.js';
 
 //
@@ -27,53 +27,54 @@ class App extends React.Component {
     };
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
-
   }
-  
+
   login() {
     auth.signInWithPopup(provider).then((result) => {
       this.setState({
-        user: result.user
-      })
+        user: result.user,
+      });
     })
-    .then(() => {
-      axios.post('/users', {
-      user: this.state.user,
-    })
-    })
+      .then(() => {
+        axios.post('/users', {
+          user: this.state.user,
+        });
+      });
   }
-  
+
   logout() {
     auth.signOut().then(() => {
       this.setState({
-        user: null
-      })
-    })
+        user: null,
+      });
+    });
   }
 
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        this.setState({user})
+        this.setState({ user });
       }
-    })
+    });
   }
 
   render() {
-    const appStyle = { 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-    }
+    const appStyle = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
 
     return (
       <div style={appStyle}>
-          {
-            !this.state.user ? <LoginCard loginClick={this.login} /> 
-              : <Main 
-                  user={this.state.user} 
-                  logoutClick={this.logout} 
+        {
+            !this.state.user ? <LoginCard loginClick={this.login} />
+              : (
+<Main 
+  user={this.state.user} 
+  logoutClick={this.logout} 
                 />
+)
           }
       </div>
     );
