@@ -7,13 +7,24 @@ import { spacing } from '@material-ui/system';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import withStyles from '@material-ui/core/styles/withStyles'
 // import '../../App.css';
 import ReviewList from '../Components/ReviewList.jsx';
 import Video from '../Components/Video.jsx';
 
+const styles = theme => ({
+  form: {
+    marginTop: theme.spacing(),
+  },
+});
 class MovieDescript extends React.Component {
   constructor(props) {
     super(props);
@@ -135,6 +146,7 @@ class MovieDescript extends React.Component {
       alignItems: 'center',
       justifyContent: 'center',
     }
+   
 
     const { movie } = this.props;
 
@@ -144,6 +156,7 @@ class MovieDescript extends React.Component {
           {matches =>
             matches ? (
               <div>
+                
                 <Box style={appStyle} display="flex" flexDirection="column">
                   <Card display="flex" style={cardStyle} >
                     <CardActionArea>
@@ -155,6 +168,8 @@ class MovieDescript extends React.Component {
                         <Typography variant="body2" color="textSecondary" component="p">
                           {movie.overview}
                         </Typography>
+                        <br />
+                        
                         <br />
                         <Typography gutterBottom variant="h5" component="h2">
                           Average Rating: {movie.voteAvg}
@@ -189,6 +204,7 @@ class MovieDescript extends React.Component {
                           {movie.overview}
                         </Typography>
                         <br />
+                        
                         <Typography gutterBottom variant="h5" component="h2">
                           Average Rating: {movie.voteAvg}
                         </Typography>
@@ -198,12 +214,18 @@ class MovieDescript extends React.Component {
                   <br />
                   <br />
                     <img src={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`} alt="" />
-                  <Box style={appStyle} display="flex" justifyContent="space-around" flexDirection="row" flexWrap="wrap">
+                    <Box style={appStyle} display="flex" justifyContent="space-around" flexDirection="row" flexWrap="wrap">
                       <Button style={btnStyle} onClick={this.upvote} variant="contained" color="primary">Upvote</Button>
                       <h5 m={2}>{this.state.userVotes}</h5>
                       <Button style={btnStyle} onClick={this.downvote} variant="contained" color="primary">Downvote</Button>
                       <Button style={btnStyle} onClick={this.addToList} variant="contained" color="primary">Add to Watchlist</Button>
                     </Box>
+                    <FormControl>
+                      <InputLabel htmlFor="my-input">Email address</InputLabel>
+                      <Input id="my-input" aria-describedby="my-helper-text" />
+                      <Button style={btnStyle} variant="contained" color="primary">Find Showtimes</Button>
+                    </FormControl>
+                    <br />
                     <Video movie={movie} />
                     <ReviewList reviews={this.state.reviews} />
                   </Box>
@@ -216,4 +238,4 @@ class MovieDescript extends React.Component {
   }
 }
 
-export default MovieDescript;
+export default withStyles(styles)(MovieDescript);
