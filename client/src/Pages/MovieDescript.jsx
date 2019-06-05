@@ -73,9 +73,10 @@ class MovieDescript extends React.Component {
     }
 
     //showtime click handler. takes date and zip code
-    handleShowtimes(date, zipCode) {
+    handleShowtimes(movieName, date, zipCode) {
       //axios post to server
       axios.post('/showtimes', {
+        movieName,
         date,
         zipCode,
       })
@@ -249,7 +250,7 @@ class MovieDescript extends React.Component {
                     </Box>
                     <Box m={2} display="flex" flexDirection="row">
                       <Box m={1}>
-                        <Button onClick={() => this.handleShowtimes(date, zip)} variant="contained" color="primary" type="click" value="Search">Find Showtimes</Button>
+                        <Button onClick={() => this.handleShowtimes(movie.title, date, zip)} variant="contained" color="primary" type="click" value="Search">Find Showtimes</Button>
                       </Box>
                       <br/>
                       <input type="text" value={date} onChange={this.handleDate} />
