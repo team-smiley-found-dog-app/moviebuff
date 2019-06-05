@@ -19,7 +19,8 @@ const { // pull all backend helper functions for server and database interaction
   storeUsersMovies,
   findUsersMovies,
   findAllMovies,
-  getTrailer, 
+  getTrailer,
+  storeTVshow,
 } = require('./helpers/index');
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
@@ -96,6 +97,23 @@ app.post('/usersMovies', (req, res) => { // needs to be post request to store re
 
 // Post request for TVShows
 // '/tvShows'
+app.post('/tvshows', (req, res) => {
+  const { title, overview, poster_path, vote_count, vote_average, email } = req.body;
+  storeTVshow(
+    title,
+    overview,
+    poster_path,
+    vote_count,
+    vote_average
+  )
+  .then(() => findShowId(title))
+  .then(showDbId => findUserId(email).then(uDbId => storeUsersShows(uDbId, showDbId)))
+  .then(() => res.send(201))
+  .catch(error => {
+    console.error(error);
+    res.sendStatus(500);
+  });
+});
 // destructure out info from req.body
 // call helper function
 // add info to database
