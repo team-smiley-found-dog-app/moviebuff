@@ -37,6 +37,7 @@ const Movie = sequelize.define('movie', { // model schema for movie -- lowercase
 const UsersMovies = sequelize.define('users_movies', {}); // create join table as new table so it can be referenced as variable
 UsersMovies.belongsTo(User); // define join table relationship to User
 UsersMovies.belongsTo(Movie); // define join table relationship to Movie
+// add join for tvshows with user
 
 // Create model schema for TVShows
 const TVShows = sequelize.define('tvshows', {
