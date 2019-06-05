@@ -94,6 +94,9 @@ app.post('/usersMovies', (req, res) => { // needs to be post request to store re
     });
 })
 
+//post request to showtimes. takes request and response
+  //access date and zip code in request
+  //call helper function that makes axios get to api and saves to database
 // Put Requests 
 
 app.put('/votes', (req, res) => { // should be called when up or downvote is clicked

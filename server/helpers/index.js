@@ -9,6 +9,11 @@ const Op = Sequelize.Op; // needed for special Sequelize queries
 
 // Creation Functions
 
+//store showtimes
+const storeShowtimes = (date, zipCode) => {
+  //axios get to tmsapi. use date, zip code, and api key in url params
+    //save showtimes, movie name, and runtime to database
+}
 const storeUser = (username, email) => User.findOrCreate({ // create user with params to match schema
   where: { email }, // keeps entries unique to email
   defaults: { username, email } // stores params with corresponding keys
