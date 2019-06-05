@@ -110,6 +110,19 @@ const nowPlaying = () => // grabs movies that are currently playing
   .then(response => response)
   .catch(err => console.error(err))
 
+const tvAiring = () => 
+  axios.get('https://api.themoviedb.org/3/tv/popular', {
+    params: {
+      api_key: API_KEY,
+      language: 'en-US',
+      page: 1,
+      region: 'US',
+    }
+  })
+  .then(response => response)
+  .catch(err => console.log(err))
+
+
 
 const getMovie = movieName => // grabs searched movies
   axios.get('https://api.themoviedb.org/3/search/movie', {
@@ -183,4 +196,5 @@ module.exports = {
   storeTVshow,
   findShowId,
   storeUsersShows,
+  tvAiring,
 }

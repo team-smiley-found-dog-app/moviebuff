@@ -11,13 +11,8 @@ sequelize.authenticate()
   .catch(err => console.error('Could not connect to the database', err));
 
 // sequelize.sync({
-<<<<<<< HEAD
-//   force: true, // Drops info in database for testing 
-// });
-=======
 //   force: true, // Drops info in database for testing
 // })
->>>>>>> 1a0334b3ce023e6137bc9e0dfeac5ada3f7d036c
 
 const User = sequelize.define('user', { // model schema for user -- lowercase for psql.
   username: Sequelize.STRING,
