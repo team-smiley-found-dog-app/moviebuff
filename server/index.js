@@ -24,6 +24,7 @@ const { // pull all backend helper functions for server and database interaction
   findShowId,
   storeUsersShows,
   tvAiring,
+  getShow,
 } = require('./helpers/index');
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
@@ -187,6 +188,28 @@ app.get('/movie/:movieName', (req, res) => { // route that points to a movie nam
       console.error(error);
       res.sendStatus(500);
     })
+});
+
+app.get('/tv/:showName', (req, res) => {
+  const { showName } = req.params;
+  getShow(showName)
+  .then(searchResults => {
+    const searchedTv = searchResults.map(show => {
+      return {
+        movieId: show.id,
+        title: show.name,
+        overview: show.overview,
+        posterPath: show.poster_path,
+        voteAvg: show.vote_average,
+        voteCount: show.vote_count,
+      }
+    });
+    res.json({ data : searchedTv });
+  })
+  .catch(error => {
+    console.log(error);
+    res.sendStatus(500);
+  })
 });
 
 app.get('/trailer/:title', (req, res) => {
