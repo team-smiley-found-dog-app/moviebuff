@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { API_KEY, youtube_api_key } = require('../../config')
-const { User, Movie, UsersMovies } = require('../../database');
+const { User, Movie, UsersMovies, Showtimes } = require('../../database');
 const Sequelize = require('sequelize');
 
 const Op = Sequelize.Op; // needed for special Sequelize queries
@@ -10,10 +10,14 @@ const Op = Sequelize.Op; // needed for special Sequelize queries
 // Creation Functions
 
 //store showtimes
-const storeShowtimes = (date, zipCode) => {
+const storeShowtimes = (movieName, date, zipCode) => {
+  let url = `http://data.tmsapi.com/v1.1/movies/showings?startDate=${date}&zip=${zipCode}&api_key=${process.env.SHOWTIME_API}`
   //axios get to tmsapi. use date, zip code, and api key in url params
-    //save showtimes, movie name, and runtime to database
-}
+  axios.get(url)
+    .then((response) => {
+      //save showtimes, movie name, and runtime to database
+    });
+};
 const storeUser = (username, email) => User.findOrCreate({ // create user with params to match schema
   where: { email }, // keeps entries unique to email
   defaults: { username, email } // stores params with corresponding keys

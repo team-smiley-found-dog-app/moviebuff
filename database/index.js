@@ -14,6 +14,22 @@ sequelize.sync({
   force: true, // Drops info in database for testing 
 })
 
+//make showtimes model schema
+const Showtimes = sequelize.define('showtimes', {
+  title: {
+    allowNull: false,
+    unique: true,
+    type: Sequelize.STRING,
+  },
+  theater: {
+    allowNull: false,
+    unique: true,
+    type: Sequelize.STRING,
+  },
+  time: Sequelize.STRING,
+});
+
+
 const User = sequelize.define('user', { // model schema for user -- lowercase for psql. 
   username: Sequelize.STRING,
   email: Sequelize.STRING,
@@ -40,4 +56,4 @@ const UsersMovies = sequelize.define('users_movies', {}); // create join table a
 UsersMovies.belongsTo(User); // define join table relationship to User
 UsersMovies.belongsTo(Movie); // define join table relationship to Movie
 
-module.exports = { User, Movie, UsersMovies };
+module.exports = { User, Movie, UsersMovies, Showtimes };
