@@ -23,6 +23,7 @@ const { // pull all backend helper functions for server and database interaction
   storeTVshow,
   findShowId,
   storeUsersShows,
+  tvAiring,
 } = require('./helpers/index');
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
@@ -222,4 +223,26 @@ app.get('/login', (req, res) => {
 //route for search results page
 app.get('/results', (req, res) => {
   res.render('results')
+})
+//route for tvshows page
+app.get('/tvshows', (req, res) => {
+  tvAiring()
+    .then(shows => {
+      const { results } = shows.data; // pull results from movies.data
+      const currentMovies = results.map(movie => { // return an array of objects for each movie
+        return {
+          movieId: movie.id,
+          title: movie.name,
+          overview: movie.overview,
+          posterPath: movie.poster_path,
+          voteAvg: movie.vote_average,
+          voteCount: movie.vote_count,
+        }
+      });
+      res.json({ data: currentMovies }); // respond with object movie data
+    })
+    .catch(error => {
+      console.error(error);
+      res.sendStatus(500);
+    })
 })

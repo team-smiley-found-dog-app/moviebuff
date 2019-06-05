@@ -70,6 +70,8 @@ export default class Navbar extends Component {
                 <Button onClick={this.props.goHome}>Home</Button>
                 
                 <Button onClick={this.props.viewWatchlist}>View Watchlist</Button>
+
+                <Button onClick={this.props.tvShow}>TV Shows</Button>
       
               </Drawer>
             </Toolbar>

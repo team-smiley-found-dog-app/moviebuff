@@ -26,7 +26,9 @@ class Main extends React.Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.viewWatchlist = this.viewWatchlist.bind(this);
-    this.goHome = this.goHome.bind(this);
+    this.goHome = this.goHome.bind(this);//
+    this.gettvShows = this.gettvShows.bind(this);
+    this.tvShow = this.tvShow.bind(this);
   }
 
   // handle request for movies playing in theatres now
@@ -49,6 +51,16 @@ class Main extends React.Component {
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  gettvShows() {
+    return axios.get(`/tvshows`)
+    .then((shows) => {
+      return _.shuffle(shows.data.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
   // when user visits page, show now playing movies and set them to state
@@ -81,6 +93,16 @@ class Main extends React.Component {
 
   goHome() {
     this.getNowPlayingMovies()
+      .then((response) => {
+        this.setState({
+          movies: response,
+          movie: null,
+        });
+      })
+  }
+
+  tvShow() {
+    this.gettvShows()
       .then((response) => {
         this.setState({
           movies: response,
@@ -128,6 +150,7 @@ class Main extends React.Component {
           goHome={this.goHome}
           viewWatchlist={this.viewWatchlist}
           user={this.props.user}
+          tvShow={this.tvShow}
         />
           <div>
             <Search handleSearch={this.handleSearch} />
@@ -143,6 +166,7 @@ class Main extends React.Component {
             goHome={this.goHome}
             viewWatchlist={this.viewWatchlist}
             user={this.props.user}
+            tvShow={this.tvShow}
           />
           <div>
             <Search handleSearch={this.handleSearch} />
