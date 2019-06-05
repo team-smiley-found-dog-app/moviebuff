@@ -27,6 +27,7 @@ class Main extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.viewWatchlist = this.viewWatchlist.bind(this);
     this.goHome = this.goHome.bind(this);//
+    this.tvShows = this.tvShows.bind(this);
   }
 
   // handle request for movies playing in theatres now
@@ -49,6 +50,16 @@ class Main extends React.Component {
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  tvShows(video) {
+    return axios.get(`/tvshows/`)
+    .then((shows) => {
+      return shows.data.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
   // when user visits page, show now playing movies and set them to state

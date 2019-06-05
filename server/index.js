@@ -194,3 +194,7 @@ app.get('/login', (req, res) => {
 app.get('/results', (req, res) => {
   res.render('results')
 })
+//route for tvshows page
+app.get('/tvshows', (req, res) => {
+  res.render('tvshows');
+})
