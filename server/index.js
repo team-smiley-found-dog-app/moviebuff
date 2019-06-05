@@ -21,6 +21,8 @@ const { // pull all backend helper functions for server and database interaction
   findAllMovies,
   getTrailer,
   storeTVshow,
+  findShowId,
+  storeUsersShows,
 } = require('./helpers/index');
 
 app.use(express.static(path.join(__dirname, "../client/dist")));

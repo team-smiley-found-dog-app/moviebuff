@@ -43,8 +43,12 @@ const storeTVshow = (title, showDescription, posterPath, voteCount, voteAverage)
     voteAverage,
   }
 });
-  // calls Schema model
-  // passes in params with corresponding keys
+
+const storeUsersShows = (uDbId, showDbId) => 
+  UsersMovies.findOrCreate({
+    where: { userId: uDbId, showId: showDbId },
+    defaults: { userId: uDbId, showId: showDbId }
+  })
 
 // Retrieval functions
 
@@ -81,6 +85,9 @@ const findMovieId = title =>
     .then(movie => movie.id); // sends back id of the movie that matches title on Movie table
 
 // Create helper function to grab all tvShows from db
+const findShowId = title =>
+  TVShows.findOne({ where: { title } })
+    .then(show => show.id);
 // search for given id
 
 // Update functions
@@ -174,4 +181,6 @@ module.exports = {
   findAllMovies,
   getTrailer,
   storeTVshow,
+  findShowId,
+  storeUsersShows,
 }

@@ -32,13 +32,6 @@ const Movie = sequelize.define('movie', { // model schema for movie -- lowercase
   },
 });
 
-// Postgres will automatically make movie and user plural values in db tables
-
-const UsersMovies = sequelize.define('users_movies', {}); // create join table as new table so it can be referenced as variable
-UsersMovies.belongsTo(User); // define join table relationship to User
-UsersMovies.belongsTo(Movie); // define join table relationship to Movie
-// add join for tvshows with user
-
 // Create model schema for TVShows
 const TVShows = sequelize.define('tvshows', {
   title: Sequelize.STRING,
@@ -52,7 +45,13 @@ const TVShows = sequelize.define('tvshows', {
     allowNull: false,
   },
 });
-// get title, showDescription, voteCount, voteAverage, posterPath
+// Postgres will automatically make movie and user plural values in db tables
+
+const UsersMovies = sequelize.define('users_movies', {}); // create join table as new table so it can be referenced as variable
+UsersMovies.belongsTo(User); // define join table relationship to User
+UsersMovies.belongsTo(Movie); // define join table relationship to Movie
+UsersMovies.belongsTo(TVShows);
+// add join for tvshows with user
 
 
 module.exports = { User, Movie, UsersMovies, TVShows };
