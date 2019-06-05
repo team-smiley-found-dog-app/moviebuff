@@ -1,6 +1,6 @@
 require('dotenv').config();
 const path = require('path');
-const hostname = process.env.SERVER_HOST;
+const hostname = 'localhost';
 const port = process.env.SERVER_PORT;
 const express = require('express');
 const app = express();
@@ -19,7 +19,10 @@ const { // pull all backend helper functions for server and database interaction
   storeUsersMovies,
   findUsersMovies,
   findAllMovies,
-  getTrailer, 
+  getTrailer,
+  storeTVshow,
+  findShowId,
+  storeUsersShows,
 } = require('./helpers/index');
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
@@ -93,6 +96,29 @@ app.post('/usersMovies', (req, res) => { // needs to be post request to store re
       res.sendStatus(500)
     });
 })
+
+// Post request for TVShows
+// '/tvShows'
+app.post('/tvshows', (req, res) => {
+  const { title, overview, poster_path, vote_count, vote_average, email } = req.body;
+  storeTVshow(
+    title,
+    overview,
+    poster_path,
+    vote_count,
+    vote_average
+  )
+  .then(() => findShowId(title))
+  .then(showDbId => findUserId(email).then(uDbId => storeUsersShows(uDbId, showDbId)))
+  .then(() => res.send(201))
+  .catch(error => {
+    console.error(error);
+    res.sendStatus(500);
+  });
+});
+// destructure out info from req.body
+// call helper function
+// add info to database
 
 // Put Requests 
 
@@ -172,6 +198,9 @@ app.get('/trailer/:title', (req, res) => {
   .catch((err) => console.error(err));
 })
 
+// get request for tvShows
+// 'tvShows'
+// call helper to get tvshows from db
 
 // routes for pages --- may not be needed --- will address later
 

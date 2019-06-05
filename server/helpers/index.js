@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { API_KEY, youtube_api_key } = require('../../config')
-const { User, Movie, UsersMovies } = require('../../database');
+const { User, Movie, UsersMovies, TVShows } = require('../../database');
 const Sequelize = require('sequelize');
 
 const Op = Sequelize.Op; // needed for special Sequelize queries
@@ -30,6 +30,24 @@ const storeUsersMovies = (uDbId, movDbId) => // takes in user and movie id's fro
   UsersMovies.findOrCreate({ // creates a join table with unique values for movieId and userId
     where: { userId: uDbId, movieId: movDbId }, 
     defaults: { userId: uDbId, movieId: movDbId }
+  })
+
+// Create helper function for storing tvShows
+const storeTVshow = (title, showDescription, posterPath, voteCount, voteAverage) => TVShows.findOrCreate({
+  where: { title },
+  defaults: {
+    title,
+    showDescription,
+    posterPath,
+    voteCount,
+    voteAverage,
+  }
+});
+
+const storeUsersShows = (uDbId, showDbId) => 
+  UsersMovies.findOrCreate({
+    where: { userId: uDbId, showId: showDbId },
+    defaults: { userId: uDbId, showId: showDbId }
   })
 
 // Retrieval functions
@@ -65,6 +83,12 @@ const findUserId = email =>
 const findMovieId = title =>
   Movie.findOne({ where: { title } })
     .then(movie => movie.id); // sends back id of the movie that matches title on Movie table
+
+// Create helper function to grab all tvShows from db
+const findShowId = title =>
+  TVShows.findOne({ where: { title } })
+    .then(show => show.id);
+// search for given id
 
 // Update functions
 
@@ -135,7 +159,11 @@ const getTrailer = (movieName) => {
   }).catch((err) => {
     console.error(err);
   })
-}  
+}
+
+// Create helper function for grabbing tvShows from api
+// create axios get request to url
+// give api key
 
 module.exports = {
   getMovie,
@@ -152,4 +180,7 @@ module.exports = {
   findUsersMovies,
   findAllMovies,
   getTrailer,
+  storeTVshow,
+  findShowId,
+  storeUsersShows,
 }
