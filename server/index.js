@@ -94,6 +94,12 @@ app.post('/usersMovies', (req, res) => { // needs to be post request to store re
     });
 })
 
+// Post request for TVShows
+// '/tvShows'
+// destructure out info from req.body
+// call helper function
+// add info to database
+
 // Put Requests 
 
 app.put('/votes', (req, res) => { // should be called when up or downvote is clicked
@@ -172,6 +178,9 @@ app.get('/trailer/:title', (req, res) => {
   .catch((err) => console.error(err));
 })
 
+// get request for tvShows
+// 'tvShows'
+// call helper to get tvshows from db
 
 // routes for pages --- may not be needed --- will address later
 
