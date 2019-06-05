@@ -16,17 +16,17 @@ sequelize.sync({
 
 //make showtimes model schema
 const Showtimes = sequelize.define('showtimes', {
-  title: {
+  title: Sequelize.STRING,
+  theater: Sequelize.STRING,
+  times: Sequelize.ARRAY(Sequelize.STRING),
+});
+
+const Theatres = sequelize.define('theatres', {
+  name: {
     allowNull: false,
     unique: true,
     type: Sequelize.STRING,
   },
-  theater: {
-    allowNull: false,
-    unique: true,
-    type: Sequelize.STRING,
-  },
-  time: Sequelize.STRING,
 });
 
 
@@ -56,4 +56,4 @@ const UsersMovies = sequelize.define('users_movies', {}); // create join table a
 UsersMovies.belongsTo(User); // define join table relationship to User
 UsersMovies.belongsTo(Movie); // define join table relationship to Movie
 
-module.exports = { User, Movie, UsersMovies, Showtimes };
+module.exports = { User, Movie, UsersMovies, Showtimes, Theatres };

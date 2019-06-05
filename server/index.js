@@ -19,7 +19,8 @@ const { // pull all backend helper functions for server and database interaction
   storeUsersMovies,
   findUsersMovies,
   findAllMovies,
-  getTrailer, 
+  getTrailer,
+  storeShowtimes,
 } = require('./helpers/index');
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
@@ -98,6 +99,7 @@ app.post('/usersMovies', (req, res) => { // needs to be post request to store re
 app.post('/showtimes', (req, res) => {
   //access date and zip code in request
   const { movieName, date, zipCode} = req.body;
+  storeShowtimes(movieName, date, zipCode);
   res.send(201);
   //call helper function that makes axios get to api and saves to database
 });

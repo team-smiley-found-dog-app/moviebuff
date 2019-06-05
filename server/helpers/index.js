@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { API_KEY, youtube_api_key } = require('../../config')
-const { User, Movie, UsersMovies, Showtimes } = require('../../database');
+const { User, Movie, UsersMovies, Showtimes, Theatres } = require('../../database');
 const Sequelize = require('sequelize');
 
 const Op = Sequelize.Op; // needed for special Sequelize queries
@@ -10,12 +10,40 @@ const Op = Sequelize.Op; // needed for special Sequelize queries
 // Creation Functions
 
 //store showtimes
-const storeShowtimes = (movieName, date, zipCode) => {
+const storeShowtimes = (title, date, zipCode) => {
   let url = `http://data.tmsapi.com/v1.1/movies/showings?startDate=${date}&zip=${zipCode}&api_key=${process.env.SHOWTIME_API}`
   //axios get to tmsapi. use date, zip code, and api key in url params
   axios.get(url)
     .then((response) => {
-      //save showtimes, movie name, and runtime to database
+      console.log(response);
+      //iterate response data
+      response.data.forEach((showtime) => {
+        // CHECK FOR MATCHING MOVIE TITLE
+        if (showtime.title === title) {
+          // iterate over showtimes
+          showtime.showtimes.forEach((show) => {
+            // save showtimes, movie name, and runtime to database
+            // store dateTimes in array
+            const times = [];
+            times.push(show.dateTime);
+            Showtimes.findOrCreate({
+              where: { title },
+              defaults: {
+                title: showtime.title,
+                theater: show.theatre.name,
+                times,
+              },
+            });
+            // Theatres.findOrCreate({
+            //   where: { name: show.theatre.name },
+            //   defaults: {
+            //     name: show.theatre.name,
+            //   },
+            // });
+            console.log('hey');
+          });
+        }
+      });
     });
 };
 const storeUser = (username, email) => User.findOrCreate({ // create user with params to match schema
@@ -161,4 +189,5 @@ module.exports = {
   findUsersMovies,
   findAllMovies,
   getTrailer,
+  storeShowtimes,
 }
