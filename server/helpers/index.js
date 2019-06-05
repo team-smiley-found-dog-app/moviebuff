@@ -32,6 +32,10 @@ const storeUsersMovies = (uDbId, movDbId) => // takes in user and movie id's fro
     defaults: { userId: uDbId, movieId: movDbId }
   })
 
+  // Create helper function for storing tvShows
+  // calls Schema model
+  // passes in params with corresponding keys
+
 // Retrieval functions
 
 const findUsersMovies = uDbId => // param passed in is the user id from database
@@ -65,6 +69,9 @@ const findUserId = email =>
 const findMovieId = title =>
   Movie.findOne({ where: { title } })
     .then(movie => movie.id); // sends back id of the movie that matches title on Movie table
+
+// Create helper function to grab all tvShows from db
+// search for given id
 
 // Update functions
 
@@ -135,7 +142,11 @@ const getTrailer = (movieName) => {
   }).catch((err) => {
     console.error(err);
   })
-}  
+}
+
+// Create helper function for grabbing tvShows from api
+// create axios get request to url
+// give api key
 
 module.exports = {
   getMovie,
