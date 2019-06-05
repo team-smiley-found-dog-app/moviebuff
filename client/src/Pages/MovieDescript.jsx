@@ -42,6 +42,8 @@ class MovieDescript extends React.Component {
     this.upvote = this.upvote.bind(this);
     this.downvote = this.downvote.bind(this);
     this.handleDate = this.handleDate.bind(this);
+    this.handleZip = this.handleZip.bind(this);
+    this.handleShowtimes = this.handleShowtimes.bind(this);
   }
 
   // handle getting reviews for a movie when it is clicked
@@ -56,10 +58,24 @@ class MovieDescript extends React.Component {
         console.error(error);
       });
     }
+    //bind date input
     handleDate(e) {
       this.setState({
         date: e.target.value
       })
+    }
+
+    //bind zip code input
+    handleZip(e) {
+      this.setState({
+        zip: e.target.value
+      })
+    }
+
+    //showtime click handler. takes date and zip code
+    handleShowtimes(date, zipCode) {
+      //axios post to server
+      console.log(date, zipCode, 'clicked');
     }
 
   // when this component is rendered, get reviews
@@ -229,11 +245,11 @@ class MovieDescript extends React.Component {
                     </Box>
                     <Box m={2} display="flex" flexDirection="row">
                       <Box m={1}>
-                        <Button onClick={this.handleSubmit} variant="contained" color="primary" type="submit" value="Search">Find Showtimes</Button>
+                        <Button onClick={() => this.handleShowtimes(date, zip)} variant="contained" color="primary" type="click" value="Search">Find Showtimes</Button>
                       </Box>
                       <br/>
                       <input type="text" value={date} onChange={this.handleDate} />
-                      <input type="text" value={zip} onChange={this.handleChange} />
+                      <input type="text" value={zip} onChange={this.handleZip} />
                     </Box>
                     <br />
                     <Video movie={movie} />
