@@ -29,6 +29,7 @@ class Main extends React.Component {
     this.goHome = this.goHome.bind(this);//
     this.gettvShows = this.gettvShows.bind(this);
     this.tvShow = this.tvShow.bind(this);
+    this.getSearchedShows = this.getSearchedShows.bind(this);
   }
 
   // handle request for movies playing in theatres now
@@ -51,6 +52,14 @@ class Main extends React.Component {
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  getSearchedShows(show) {
+    return axios.get(`/tv/${show}`)
+    .then((shows) => {
+      return shows.data.data;
+    })
+    .catch(error => console.log(error));
   }
 
   gettvShows() {
@@ -88,6 +97,12 @@ class Main extends React.Component {
       .catch((error) => {
         console.error(error);
       });
+      this.getSearchedShows(input)
+      .then((shows) => {
+        this.setState({movie: null});
+        this.setState({movies: shows});
+      })
+      .catch(error => console.log(error));
     event.preventDefault();
   }
 

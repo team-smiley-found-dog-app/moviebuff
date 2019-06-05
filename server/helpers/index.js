@@ -134,6 +134,16 @@ const getMovie = movieName => // grabs searched movies
   .then(response => response.data.results)
   .catch(err => console.error(err))
 
+const getShow = showName =>
+  axios.get('https://api.themoviedb.org/3/search/tv', {
+    params: {
+      api_key: API_KEY,
+      query: `${showName}`,
+    }
+  })
+  .then(response => response.data.results)
+  .catch(err => console.log(err))
+
 const getPopular = () => // grabs popular movies
   axios.get('https://api.themoviedb.org/3/movie/popular', {
     params: {
@@ -197,4 +207,5 @@ module.exports = {
   findShowId,
   storeUsersShows,
   tvAiring,
+  getShow,
 }
