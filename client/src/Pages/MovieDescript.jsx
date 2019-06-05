@@ -75,6 +75,10 @@ class MovieDescript extends React.Component {
     //showtime click handler. takes date and zip code
     handleShowtimes(date, zipCode) {
       //axios post to server
+      axios.post('/showtimes', {
+        date,
+        zipCode,
+      })
       console.log(date, zipCode, 'clicked');
     }
 
