@@ -39,7 +39,19 @@ UsersMovies.belongsTo(User); // define join table relationship to User
 UsersMovies.belongsTo(Movie); // define join table relationship to Movie
 
 // Create model schema for TVShows
+const TVShows = sequelize.define('tvshows', {
+  title: Sequelize.STRING,
+  showDescription: Sequelize.STRING(2000),
+  posterPath: Sequelize.STRING,
+  voteCount: Sequelize.INTEGER,
+  voteAverage: Sequelize.FLOAT,
+  userVotes: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+    allowNull: false,
+  },
+});
 // get title, showDescription, voteCount, voteAverage, posterPath
 
 
-module.exports = { User, Movie, UsersMovies };
+module.exports = { User, Movie, UsersMovies, TVShows };
