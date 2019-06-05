@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { API_KEY, youtube_api_key } = require('../../config')
-const { User, Movie, UsersMovies } = require('../../database');
+const { User, Movie, UsersMovies, TVShows } = require('../../database');
 const Sequelize = require('sequelize');
 
 const Op = Sequelize.Op; // needed for special Sequelize queries
@@ -32,7 +32,17 @@ const storeUsersMovies = (uDbId, movDbId) => // takes in user and movie id's fro
     defaults: { userId: uDbId, movieId: movDbId }
   })
 
-  // Create helper function for storing tvShows
+// Create helper function for storing tvShows
+const storeTVshow = (title, showDescription, posterPath, voteCount, voteAverage) => TVShows.findOrCreate({
+  where: { title },
+  defaults: {
+    title,
+    showDescription,
+    posterPath,
+    voteCount,
+    voteAverage,
+  }
+});
   // calls Schema model
   // passes in params with corresponding keys
 
@@ -163,4 +173,5 @@ module.exports = {
   findUsersMovies,
   findAllMovies,
   getTrailer,
+  storeTVshow,
 }
