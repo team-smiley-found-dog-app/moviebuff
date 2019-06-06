@@ -3,7 +3,7 @@ import axios from 'axios';
 // import { Button, Card, Row, Col } from 'react-materialize';
 
 import Media from 'react-media';
-import { spacing } from '@material-ui/system';
+import { spacing, typography } from '@material-ui/system';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -260,14 +260,15 @@ class MovieDescript extends React.Component {
                     <Video movie={movie} />
                     <br />
                     <Box m={2} display="flex" flexDirection="row">
-                      <Box m={1}>
-                        <Button onClick={() => this.handleShowtimes(movie.title, date, zip)} variant="contained" color="primary" type="click" value="Search">Find Showtimes</Button>
-                      </Box>
-                      <br/>
-                      <input type="text" value={date} onChange={this.handleDate} />
-                      <input type="text" value={zip} onChange={this.handleZip} />
+                      <Typography>
+                        YYYY-MM-DD <input type="text" value={date} onChange={this.handleDate} />
+                        Zip Code <input type="text" value={zip} onChange={this.handleZip} />
+                        <Box m={1}>
+                          <Button onClick={() => this.handleShowtimes(movie.title, date, zip)} variant="contained" color="primary" type="click" value="Search">Find Showtimes</Button>
+                        </Box>
+                      </Typography>
                     </Box>
-                    {this.state.showtimes && <Showtimes shows={this.state.showtimes} />}
+                    <Showtimes shows={this.state.showtimes} />
                     <ReviewList reviews={this.state.reviews} />
                   </Box>
               </div>
