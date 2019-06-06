@@ -20,6 +20,7 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import ReviewList from '../Components/ReviewList.jsx';
 import Video from '../Components/Video.jsx';
 import { SHOWTIME_API } from '../../../config.js';
+import Showtimes from '../Components/Showtimes.jsx';
 
 const styles = theme => ({
   form: {
@@ -32,7 +33,7 @@ class MovieDescript extends React.Component {
     this.state = {
       reviews: [],
       movies: [],
-      showtimes: [],
+      showtimes: {},
       date: '',
       zip: '',
     };
@@ -266,7 +267,7 @@ class MovieDescript extends React.Component {
                       <input type="text" value={date} onChange={this.handleDate} />
                       <input type="text" value={zip} onChange={this.handleZip} />
                     </Box>
-                    <Showtimes shows={this.state.showtimes} />
+                    {this.state.showtimes && <Showtimes shows={this.state.showtimes} />}
                     <ReviewList reviews={this.state.reviews} />
                   </Box>
               </div>

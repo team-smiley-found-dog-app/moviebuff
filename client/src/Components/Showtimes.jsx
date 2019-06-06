@@ -8,12 +8,12 @@ class Showtimes extends React.Component {
 
   render() {
     const { shows } = this.props;
+    console.log(shows, 'props');
     return (
       <div>
-        {shows.showtimes.map(showtime => <Showtime show={showtime}/>)}
+        {shows.showtimes && shows.showtimes.map(showtime => <Showtime show={showtime}/>)}        
       </div>
     )
   }
 }
-
 export default Showtimes;
