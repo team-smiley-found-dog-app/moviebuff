@@ -13,53 +13,66 @@ const Op = Sequelize.Op; // needed for special Sequelize queries
 
 
 //store showtimes
-const storeShowtimes = (title, date, zipCode) => {
-  let url = `http://data.tmsapi.com/v1.1/movies/showings?startDate=${date}&zip=${zipCode}&api_key=${process.env.SHOWTIME_API}`
-  //axios get to tmsapi. use date, zip code, and api key in url params
-  axios.get(url)
-    .then((response) => {
-      console.log(response);
-      //iterate response data
-      response.data.forEach((showtime) => {
-        // CHECK FOR MATCHING MOVIE TITLE
-        if (showtime.title === title) {
-          // iterate over showtimes
-          showtime.showtimes.forEach((showing) => {
-            // save showtimes, movie name, and runtime to database
-            // store dateTimes in array
-            // const times = [];
-            // times.push(show.dateTime);
-            Show.findOrCreate({
-              where: { name: showtime.title },
-              defaults: {
-                name: showtime.title,
-              },
-            });
-            console.log(Show, 'shoooow');
-            Theatres.findOrCreate({
-              where: { name: showing.theatre.name },
-              defaults: {
-                name: showing.theatre.name,
-              },
-            });
-            Showtimes.findOrCreate({
-              where: { time: showing.dateTime },
-              defaults: {
-                time: showing.dateTime,
-              },
-              includes: [{
-                model: Show, as: 'ShowRef',
-              }, {
-                model: Theatres, as: 'TheatreRef',
-              }],
-            });
-            console.log('hey');
-          });
-        }
-      });
+// const storeShowtimes = (title, date, zipCode) => {
+//   let url = `http://data.tmsapi.com/v1.1/movies/showings?startDate=${date}&zip=${zipCode}&api_key=${process.env.SHOWTIME_API}`
+//   //axios get to tmsapi. use date, zip code, and api key in url params
+//   axios.get(url)
+//     .then((response) => {
+//       console.log(response);
+//       //iterate response data
+//       response.data.forEach((showtime) => {
+//         // CHECK FOR MATCHING MOVIE TITLE
+//         if (showtime.title === title) {
+//           // iterate over showtimes
+//           showtime.showtimes.forEach((showing) => {
+//             // save showtimes, movie name, and runtime to database
+//             // store dateTimes in array
+//             // const times = [];
+//             // times.push(show.dateTime);
+//             Show.findOrCreate({
+//               where: { name: showtime.title },
+//               defaults: {
+//                 name: showtime.title,
+//               },
+//             });
+//             console.log(Show, 'shoooow');
+//             Theatres.findOrCreate({
+//               where: { name: showing.theatre.name },
+//               defaults: {
+//                 name: showing.theatre.name,
+//               },
+//             });
+//             Showtimes.findOrCreate({
+//               where: { time: showing.dateTime },
+//               defaults: {
+//                 time: showing.dateTime,
+//               },
+//               includes: [{
+//                 model: Show, as: 'ShowRef',
+//               }, {
+//                 model: Theatres, as: 'TheatreRef',
+//               }],
+//             });
+//             console.log('hey');
+//           });
+//         }
+//       });
+//     });
+//   // get showtimes
+//   return Showtimes.findAll({ where: { title } }).then((output) => {
+//     return output;
+//   });
+// };
+
+const getShowtimes = (title, date, zipCode) => {
+  const url = `http://data.tmsapi.com/v1.1/movies/showings?startDate=${date}&zip=${zipCode}&api_key=${process.env.SHOWTIME_API}`;
+  return axios.get(url).then((showtimes) => {
+    let output;
+    showtimes.data.forEach((showtime) => {
+      if (showtime.title === title) {
+        output = showtime;
+      }
     });
-  // get showtimes
-  return Showtimes.findAll({ where: { title } }).then((output) => {
     return output;
   });
 };
@@ -263,5 +276,5 @@ module.exports = {
   storeUsersShows,
   tvAiring,
   getShow,
-  storeShowtimes,
+  getShowtimes,
 };

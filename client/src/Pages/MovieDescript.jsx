@@ -19,6 +19,7 @@ import withStyles from '@material-ui/core/styles/withStyles'
 // import '../../App.css';
 import ReviewList from '../Components/ReviewList.jsx';
 import Video from '../Components/Video.jsx';
+import { SHOWTIME_API } from '../../../config.js';
 
 const styles = theme => ({
   form: {
@@ -75,12 +76,18 @@ class MovieDescript extends React.Component {
     //showtime click handler. takes date and zip code
     handleShowtimes(movieName, date, zipCode) {
       //axios post to server
-      axios.post('/showtimes', {
-        movieName,
-        date,
-        zipCode,
-      })
-      console.log(date, zipCode, 'clicked');
+      const url = `http://data.tmsapi.com/v1.1/movies/showings?startDate=${date}&zip=${zipCode}&api_key=${SHOWTIME_API}`;
+      // let output;
+      axios.get(url).then((showtimes) => {
+        showtimes.data.forEach((showtime) => {
+          if (showtime.title === movieName) {
+            console.log(showtime, 'showtime');
+            this.setState({
+              showtimes: showtime,
+            });
+          }
+        });
+      });
     }
 
   // when this component is rendered, get reviews
@@ -248,6 +255,9 @@ class MovieDescript extends React.Component {
                       <Button style={btnStyle} onClick={this.downvote} variant="contained" color="primary">Downvote</Button>
                       <Button style={btnStyle} onClick={this.addToList} variant="contained" color="primary">Add to Watchlist</Button>
                     </Box>
+                    <br />
+                    <Video movie={movie} />
+                    <br />
                     <Box m={2} display="flex" flexDirection="row">
                       <Box m={1}>
                         <Button onClick={() => this.handleShowtimes(movie.title, date, zip)} variant="contained" color="primary" type="click" value="Search">Find Showtimes</Button>
@@ -256,8 +266,7 @@ class MovieDescript extends React.Component {
                       <input type="text" value={date} onChange={this.handleDate} />
                       <input type="text" value={zip} onChange={this.handleZip} />
                     </Box>
-                    <br />
-                    <Video movie={movie} />
+                    <Showtimes showtimes={this.state.showtimes} />
                     <ReviewList reviews={this.state.reviews} />
                   </Box>
               </div>

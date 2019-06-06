@@ -5,7 +5,8 @@ const port = process.env.SERVER_PORT;
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-//
+const { testDb } = require('../database/test.js');
+//git st
 const { // pull all backend helper functions for server and database interaction
   getMovie,
   getPopular,
@@ -24,7 +25,7 @@ const { // pull all backend helper functions for server and database interaction
   storeTVshow,
   findShowId,
   storeUsersShows,
-  storeShowtimes,
+  getShowtimes,
   tvAiring,
   getShow,
 } = require('./helpers/index');
@@ -56,6 +57,9 @@ app.post('/movies', (req, res) => {
   })
 });
 
+app.get('/test', (req, res) => {
+  testDb({title: 'Aladdin'}, { dateTime: '2019-06-04T12:00', theatre: { name: 'AMC'}});  
+})
 app.post('/reviews', (req, res) => { // Testing needed -- edge case and destructuring
   const { movieId } = req.body; // pull movieId from body sent from front end
   getReviews(movieId)
@@ -102,13 +106,13 @@ app.post('/usersMovies', (req, res) => { // needs to be post request to store re
 })
 
 //post request to showtimes. takes request and response
-app.post('/showtimes', (req, res) => {
+app.get('/showtimes', (req, res) => {
   //access date and zip code in request
-  const { movieName, date, zipCode} = req.body;
-  storeShowtimes(movieName, date, zipCode).then((shows) => {
+  const { name, date, zip } = req.params;
+  return getShowtimes(name, date, zip).then((shows) => {
     console.log(shows);
+    res.send(shows);
   });
-  res.send(201);
   //call helper function that makes axios get to api and saves to database
 });
 // Post request for TVShows
