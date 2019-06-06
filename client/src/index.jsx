@@ -15,7 +15,7 @@ import Main from './Pages/Main.jsx';
 // firebase imports
 import firebase, { auth, provider } from '../firebaseConfig.js';
 
-//
+// hoping firebase works deployed
 class App extends React.Component {
   constructor(props) {
     super(props);

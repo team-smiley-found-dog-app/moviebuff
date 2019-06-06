@@ -1,6 +1,10 @@
 const axios = require('axios');
 const { API_KEY, youtube_api_key } = require('../../config')
+<<<<<<< HEAD
 const { User, Movie, UsersMovies, Showtimes, Theatres, Show } = require('../../database');
+=======
+const { User, Movie, UsersMovies, TVShows } = require('../../database');
+>>>>>>> abd7f0634f3a76c1b8102bb16463d5e2f65fb795
 const Sequelize = require('sequelize');
 
 const Op = Sequelize.Op; // needed for special Sequelize queries
@@ -87,6 +91,24 @@ const storeUsersMovies = (uDbId, movDbId) => // takes in user and movie id's fro
     defaults: { userId: uDbId, movieId: movDbId }
   })
 
+// Create helper function for storing tvShows
+const storeTVshow = (title, showDescription, posterPath, voteCount, voteAverage) => TVShows.findOrCreate({
+  where: { title },
+  defaults: {
+    title,
+    showDescription,
+    posterPath,
+    voteCount,
+    voteAverage,
+  }
+});
+
+const storeUsersShows = (uDbId, showDbId) => 
+  UsersMovies.findOrCreate({
+    where: { userId: uDbId, showId: showDbId },
+    defaults: { userId: uDbId, showId: showDbId }
+  })
+
 // Retrieval functions
 
 const findUsersMovies = uDbId => // param passed in is the user id from database
@@ -121,6 +143,12 @@ const findMovieId = title =>
   Movie.findOne({ where: { title } })
     .then(movie => movie.id); // sends back id of the movie that matches title on Movie table
 
+// Create helper function to grab all tvShows from db
+const findShowId = title =>
+  TVShows.findOne({ where: { title } })
+    .then(show => show.id);
+// search for given id
+
 // Update functions
 
 const changeVotes = (movDbId, numFlag) =>  // change userVotes in database -- Expects numFlag to be 1 or -1 -- Handles string edge case for numFlag value
@@ -141,6 +169,19 @@ const nowPlaying = () => // grabs movies that are currently playing
   .then(response => response)
   .catch(err => console.error(err))
 
+const tvAiring = () => 
+  axios.get('https://api.themoviedb.org/3/tv/popular', {
+    params: {
+      api_key: API_KEY,
+      language: 'en-US',
+      page: 1,
+      region: 'US',
+    }
+  })
+  .then(response => response)
+  .catch(err => console.log(err))
+
+
 
 const getMovie = movieName => // grabs searched movies
   axios.get('https://api.themoviedb.org/3/search/movie', {
@@ -151,6 +192,16 @@ const getMovie = movieName => // grabs searched movies
   })
   .then(response => response.data.results)
   .catch(err => console.error(err))
+
+const getShow = showName =>
+  axios.get('https://api.themoviedb.org/3/search/tv', {
+    params: {
+      api_key: API_KEY,
+      query: `${showName}`,
+    }
+  })
+  .then(response => response.data.results)
+  .catch(err => console.log(err))
 
 const getPopular = () => // grabs popular movies
   axios.get('https://api.themoviedb.org/3/movie/popular', {
@@ -190,7 +241,11 @@ const getTrailer = (movieName) => {
   }).catch((err) => {
     console.error(err);
   })
-}  
+}
+
+// Create helper function for grabbing tvShows from api
+// create axios get request to url
+// give api key
 
 module.exports = {
   getMovie,
@@ -207,5 +262,13 @@ module.exports = {
   findUsersMovies,
   findAllMovies,
   getTrailer,
+<<<<<<< HEAD
   storeShowtimes,
+=======
+  storeTVshow,
+  findShowId,
+  storeUsersShows,
+  tvAiring,
+  getShow,
+>>>>>>> abd7f0634f3a76c1b8102bb16463d5e2f65fb795
 }

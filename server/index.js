@@ -20,7 +20,12 @@ const { // pull all backend helper functions for server and database interaction
   findUsersMovies,
   findAllMovies,
   getTrailer,
+  storeTVshow,
+  findShowId,
+  storeUsersShows,
   storeShowtimes,
+  tvAiring,
+  getShow,
 } = require('./helpers/index');
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
@@ -105,6 +110,29 @@ app.post('/showtimes', (req, res) => {
   res.send(201);
   //call helper function that makes axios get to api and saves to database
 });
+// Post request for TVShows
+// '/tvShows'
+app.post('/tvshows', (req, res) => {
+  const { title, overview, poster_path, vote_count, vote_average, email } = req.body;
+  storeTVshow(
+    title,
+    overview,
+    poster_path,
+    vote_count,
+    vote_average
+  )
+  .then(() => findShowId(title))
+  .then(showDbId => findUserId(email).then(uDbId => storeUsersShows(uDbId, showDbId)))
+  .then(() => res.send(201))
+  .catch(error => {
+    console.error(error);
+    res.sendStatus(500);
+  });
+});
+// destructure out info from req.body
+// call helper function
+// add info to database
+
 // Put Requests 
 
 app.put('/votes', (req, res) => { // should be called when up or downvote is clicked
@@ -173,6 +201,28 @@ app.get('/movie/:movieName', (req, res) => { // route that points to a movie nam
     })
 });
 
+app.get('/tv/:showName', (req, res) => {
+  const { showName } = req.params;
+  getShow(showName)
+  .then(searchResults => {
+    const searchedTv = searchResults.map(show => {
+      return {
+        movieId: show.id,
+        title: show.name,
+        overview: show.overview,
+        posterPath: show.poster_path,
+        voteAvg: show.vote_average,
+        voteCount: show.vote_count,
+      }
+    });
+    res.json({ data : searchedTv });
+  })
+  .catch(error => {
+    console.log(error);
+    res.sendStatus(500);
+  })
+});
+
 app.get('/trailer/:title', (req, res) => {
   // helper func for axios req
   console.log(req);
@@ -183,6 +233,9 @@ app.get('/trailer/:title', (req, res) => {
   .catch((err) => console.error(err));
 })
 
+// get request for tvShows
+// 'tvShows'
+// call helper to get tvshows from db
 
 // routes for pages --- may not be needed --- will address later
 
@@ -204,4 +257,26 @@ app.get('/login', (req, res) => {
 //route for search results page
 app.get('/results', (req, res) => {
   res.render('results')
+})
+//route for tvshows page
+app.get('/tvshows', (req, res) => {
+  tvAiring()
+    .then(shows => {
+      const { results } = shows.data; // pull results from movies.data
+      const currentMovies = results.map(movie => { // return an array of objects for each movie
+        return {
+          movieId: movie.id,
+          title: movie.name,
+          overview: movie.overview,
+          posterPath: movie.poster_path,
+          voteAvg: movie.vote_average,
+          voteCount: movie.vote_count,
+        }
+      });
+      res.json({ data: currentMovies }); // respond with object movie data
+    })
+    .catch(error => {
+      console.error(error);
+      res.sendStatus(500);
+    })
 })
