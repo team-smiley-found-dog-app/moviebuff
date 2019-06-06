@@ -3,23 +3,39 @@ import axios from 'axios';
 // import { Button, Card, Row, Col } from 'react-materialize';
 
 import Media from 'react-media';
-import { spacing } from '@material-ui/system';
+import { spacing, typography } from '@material-ui/system';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import withStyles from '@material-ui/core/styles/withStyles'
 // import '../../App.css';
 import ReviewList from '../Components/ReviewList.jsx';
 import Video from '../Components/Video.jsx';
+import { SHOWTIME_API } from '../../../config.js';
+import Showtimes from '../Components/Showtimes.jsx';
 
+const styles = theme => ({
+  form: {
+    marginTop: theme.spacing(),
+  },
+});
 class MovieDescript extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       reviews: [],
       movies: [],
+      showtimes: {},
+      date: '',
+      zip: '',
     };
 
     this.getReviews = this.getReviews.bind(this);
@@ -27,6 +43,9 @@ class MovieDescript extends React.Component {
     this.addToList = this.addToList.bind(this);
     this.upvote = this.upvote.bind(this);
     this.downvote = this.downvote.bind(this);
+    this.handleDate = this.handleDate.bind(this);
+    this.handleZip = this.handleZip.bind(this);
+    this.handleShowtimes = this.handleShowtimes.bind(this);
   }
 
   // handle getting reviews for a movie when it is clicked
@@ -41,7 +60,36 @@ class MovieDescript extends React.Component {
         console.error(error);
       });
     }
-    
+    //bind date input
+    handleDate(e) {
+      this.setState({
+        date: e.target.value
+      })
+    }
+
+    //bind zip code input
+    handleZip(e) {
+      this.setState({
+        zip: e.target.value
+      })
+    }
+
+    //showtime click handler. takes date and zip code
+    handleShowtimes(movieName, date, zipCode) {
+      //axios post to server
+      const url = `http://data.tmsapi.com/v1.1/movies/showings?startDate=${date}&zip=${zipCode}&api_key=${SHOWTIME_API}`;
+      // let output;
+      axios.get(url).then((showtimes) => {
+        showtimes.data.forEach((showtime) => {
+          if (showtime.title === movieName) {
+            console.log(showtime, 'showtime');
+            this.setState({
+              showtimes: showtime,
+            });
+          }
+        });
+      });
+    }
 
   // when this component is rendered, get reviews
   componentDidMount(e) {
@@ -56,7 +104,7 @@ class MovieDescript extends React.Component {
         console.error(error);
       });
   }
-
+  
   handleVote(vote) {
     const { movie } = this.props;
     return axios.put('/votes', {
@@ -102,8 +150,10 @@ class MovieDescript extends React.Component {
         console.error(error);
       });
   }
-
-
+  //create function that triggers post request to store showtimes in database
+    //axios.post to endpoint
+      //get request to database
+        //re set showtimes state to showtimes retrieved from database
   // show detailed info about movie and reviews about movie
   render() {
     const appStyle = {
@@ -132,15 +182,17 @@ class MovieDescript extends React.Component {
       alignItems: 'center',
       justifyContent: 'center',
     }
+   
 
     const { movie } = this.props;
-
+    const { date, zip } = this.state;
     return (
       <div>
         <Media query="(max-width: 400px)">
           {matches =>
             matches ? (
               <div>
+                
                 <Box style={appStyle} display="flex" flexDirection="column">
                   <Card display="flex" style={cardStyle} >
                     <CardActionArea>
@@ -152,6 +204,8 @@ class MovieDescript extends React.Component {
                         <Typography variant="body2" color="textSecondary" component="p">
                           {movie.overview}
                         </Typography>
+                        <br />
+                        
                         <br />
                         <Typography gutterBottom variant="h5" component="h2">
                           Average Rating: {movie.voteAvg}
@@ -186,6 +240,7 @@ class MovieDescript extends React.Component {
                           {movie.overview}
                         </Typography>
                         <br />
+                        
                         <Typography gutterBottom variant="h5" component="h2">
                           Average Rating: {movie.voteAvg}
                         </Typography>
@@ -195,13 +250,25 @@ class MovieDescript extends React.Component {
                   <br />
                   <br />
                     <img src={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`} alt="" />
-                  <Box style={appStyle} display="flex" justifyContent="space-around" flexDirection="row" flexWrap="wrap">
+                    <Box style={appStyle} display="flex" justifyContent="space-around" flexDirection="row" flexWrap="wrap">
                       <Button style={btnStyle} onClick={this.upvote} variant="contained" color="primary">Upvote</Button>
                       <h5 m={2}>{this.state.userVotes}</h5>
                       <Button style={btnStyle} onClick={this.downvote} variant="contained" color="primary">Downvote</Button>
                       <Button style={btnStyle} onClick={this.addToList} variant="contained" color="primary">Add to Watchlist</Button>
                     </Box>
+                    <br />
                     <Video movie={movie} />
+                    <br />
+                    <Box m={2} display="flex" flexDirection="row">
+                      <Typography>
+                        YYYY-MM-DD <input type="text" value={date} onChange={this.handleDate} />
+                        Zip Code <input type="text" value={zip} onChange={this.handleZip} />
+                        <Box m={1}>
+                          <Button onClick={() => this.handleShowtimes(movie.title, date, zip)} variant="contained" color="primary" type="click" value="Search">Find Showtimes</Button>
+                        </Box>
+                      </Typography>
+                    </Box>
+                    <Showtimes shows={this.state.showtimes} />
                     <ReviewList reviews={this.state.reviews} />
                   </Box>
               </div>
@@ -213,4 +280,4 @@ class MovieDescript extends React.Component {
   }
 }
 
-export default MovieDescript;
+export default withStyles(styles)(MovieDescript);
