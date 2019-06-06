@@ -1,10 +1,6 @@
 const axios = require('axios');
 const { API_KEY, youtube_api_key } = require('../../config')
-<<<<<<< HEAD
-const { User, Movie, UsersMovies, Showtimes, Theatres, Show } = require('../../database');
-=======
-const { User, Movie, UsersMovies, TVShows } = require('../../database');
->>>>>>> abd7f0634f3a76c1b8102bb16463d5e2f65fb795
+const { User, Movie, UsersMovies, Showtimes, Theatres, TVShows, Show } = require('../../database');
 const Sequelize = require('sequelize');
 
 const Op = Sequelize.Op; // needed for special Sequelize queries
@@ -262,13 +258,10 @@ module.exports = {
   findUsersMovies,
   findAllMovies,
   getTrailer,
-<<<<<<< HEAD
-  storeShowtimes,
-=======
   storeTVshow,
   findShowId,
   storeUsersShows,
   tvAiring,
   getShow,
->>>>>>> abd7f0634f3a76c1b8102bb16463d5e2f65fb795
-}
+  storeShowtimes,
+};
