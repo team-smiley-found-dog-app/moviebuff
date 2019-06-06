@@ -266,7 +266,7 @@ class MovieDescript extends React.Component {
                       <input type="text" value={date} onChange={this.handleDate} />
                       <input type="text" value={zip} onChange={this.handleZip} />
                     </Box>
-                    <Showtimes showtimes={this.state.showtimes} />
+                    <Showtimes shows={this.state.showtimes} />
                     <ReviewList reviews={this.state.reviews} />
                   </Box>
               </div>
