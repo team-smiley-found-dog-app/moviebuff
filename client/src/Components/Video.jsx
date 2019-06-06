@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import SpotifyPlayer from '../Components/SpotifyPlayer.jsx';
 // import 'materialize-css';
 // import 'materialize-css/dist/css/materialize.min.css';
 
