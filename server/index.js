@@ -99,7 +99,9 @@ app.post('/usersMovies', (req, res) => { // needs to be post request to store re
 app.post('/showtimes', (req, res) => {
   //access date and zip code in request
   const { movieName, date, zipCode} = req.body;
-  storeShowtimes(movieName, date, zipCode);
+  storeShowtimes(movieName, date, zipCode).then((shows) => {
+    console.log(shows);
+  });
   res.send(201);
   //call helper function that makes axios get to api and saves to database
 });

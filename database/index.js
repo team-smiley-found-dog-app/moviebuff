@@ -10,15 +10,18 @@ sequelize.authenticate()
   .then(() => console.log('Connected to the database'))
   .catch(err => console.error('Could not connect to the database', err));
 
-sequelize.sync({
-  force: true, // Drops info in database for testing 
-})
+// sequelize.sync({
+//   force: true, // Drops info in database for testing 
+// })
 
 //make showtimes model schema
-const Showtimes = sequelize.define('showtimes', {
-  title: Sequelize.STRING,
-  theater: Sequelize.STRING,
-  times: Sequelize.ARRAY(Sequelize.STRING),
+
+const Show = sequelize.define('show', {
+  name: {
+    allowNull: false,
+    unique: true,
+    type: Sequelize.STRING,
+  },
 });
 
 const Theatres = sequelize.define('theatres', {
@@ -28,6 +31,16 @@ const Theatres = sequelize.define('theatres', {
     type: Sequelize.STRING,
   },
 });
+
+const Showtimes = sequelize.define('showtimes', {
+  time: Sequelize.STRING,
+});
+// Show.belongsToMany(Theatres, { through: Showtimes });
+// Theatres.belongsToMany(Show, { through: Showtimes });
+// Show.hasMany(Showtimes);
+// Theatres.hasMany(Showtimes);
+Showtimes.belongsTo(Show, { as: 'ShowRef', foreignKey: 'showId' });
+Showtimes.belongsTo(Theatres, { as: 'TheatreRef', foreignKey: 'theatreId' });
 
 
 const User = sequelize.define('user', { // model schema for user -- lowercase for psql. 
@@ -56,4 +69,4 @@ const UsersMovies = sequelize.define('users_movies', {}); // create join table a
 UsersMovies.belongsTo(User); // define join table relationship to User
 UsersMovies.belongsTo(Movie); // define join table relationship to Movie
 
-module.exports = { User, Movie, UsersMovies, Showtimes, Theatres };
+module.exports = { User, Show, Movie, UsersMovies, Showtimes, Theatres };

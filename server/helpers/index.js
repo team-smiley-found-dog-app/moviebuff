@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { API_KEY, youtube_api_key } = require('../../config')
-const { User, Movie, UsersMovies, Showtimes, Theatres } = require('../../database');
+const { User, Movie, UsersMovies, Showtimes, Theatres, Show } = require('../../database');
 const Sequelize = require('sequelize');
 
 const Op = Sequelize.Op; // needed for special Sequelize queries
@@ -8,6 +8,9 @@ const Op = Sequelize.Op; // needed for special Sequelize queries
 // Database Helpers
 
 // Creation Functions
+
+
+
 
 //store showtimes
 const storeShowtimes = (title, date, zipCode) => {
@@ -21,31 +24,46 @@ const storeShowtimes = (title, date, zipCode) => {
         // CHECK FOR MATCHING MOVIE TITLE
         if (showtime.title === title) {
           // iterate over showtimes
-          showtime.showtimes.forEach((show) => {
+          showtime.showtimes.forEach((showing) => {
             // save showtimes, movie name, and runtime to database
             // store dateTimes in array
-            const times = [];
-            times.push(show.dateTime);
-            Showtimes.findOrCreate({
-              where: { title },
+            // const times = [];
+            // times.push(show.dateTime);
+            Show.findOrCreate({
+              where: { name: showtime.title },
               defaults: {
-                title: showtime.title,
-                theater: show.theatre.name,
-                times,
+                name: showtime.title,
               },
             });
-            // Theatres.findOrCreate({
-            //   where: { name: show.theatre.name },
-            //   defaults: {
-            //     name: show.theatre.name,
-            //   },
-            // });
+            console.log(Show, 'shoooow');
+            Theatres.findOrCreate({
+              where: { name: showing.theatre.name },
+              defaults: {
+                name: showing.theatre.name,
+              },
+            });
+            Showtimes.findOrCreate({
+              where: { time: showing.dateTime },
+              defaults: {
+                time: showing.dateTime,
+              },
+              includes: [{
+                model: Show, as: 'ShowRef',
+              }, {
+                model: Theatres, as: 'TheatreRef',
+              }],
+            });
             console.log('hey');
           });
         }
       });
     });
+  // get showtimes
+  return Showtimes.findAll({ where: { title } }).then((output) => {
+    return output;
+  });
 };
+
 const storeUser = (username, email) => User.findOrCreate({ // create user with params to match schema
   where: { email }, // keeps entries unique to email
   defaults: { username, email } // stores params with corresponding keys
