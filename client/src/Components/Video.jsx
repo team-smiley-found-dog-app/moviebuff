@@ -4,11 +4,13 @@ import axios from 'axios';
 // import { SpotifyApiContext } from "react-spotify-api";
 // import 'materialize-css';
 // import 'materialize-css/dist/css/materialize.min.css';
+import { spotify_api } from '../../../config.js'
 
 class Video extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      trailer: null,
       album: null,
     };
 
@@ -38,7 +40,7 @@ class Video extends React.Component {
       .get(`https://api.spotify.com/v1/search?q=${this.props.movie.title}&type=album&market=US&limit=1`,
         {
           headers: {
-            'Authorization': 'Bearer BQDXCYclA4suxhNt4RxIMdqp0Woxe7pljrY2_qveiIjt4x7sz8IIUhSSmHE_2qE5AF9Qa8bOlqHY1d1WnjP9XLUW1Vyxiejt8f0x9_xO8pQDuFK6gWUNWbdE6yVjRsDw53oKoQl2L6LnIdvAcg'
+            Authorization: spotify_api,
           },
         })
       .then((res) => {
@@ -61,8 +63,8 @@ class Video extends React.Component {
       });
     this.getSoundtrack()
       .then((album) => {
-        console.log(album, "get");
-        this.setState({ album: album });
+        console.log(album.albums.items[0].external_urls.spotify, "get");
+        this.setState({ album: album.albums.items[0].uri });
       })
       .catch((err) => {
         console.error(err);
@@ -71,19 +73,21 @@ class Video extends React.Component {
 
   // search input field and button
   render() {
-    console.log(this.state.album)
-    if (this.state.trailer) {
-      return this.state.album ? (
+    const { album } = this.state;
+    console.log(album, 'spotify album from state');
+    // if (this.state.trailer) {
+      return (
         <div>
+          {/* <a href={album} target="_blank" >Click for Playlist</a> */}
             <iframe
-              src={`${this.state.album.items[0].external_urls.spotify}`}
+              src={`${album}`}
               width="250"
               height="80"
               frameborder="0"
               allowtransparency="true"
               allow="encrypted-media"
             />
-          <iframe
+          {/* <iframe
             width="853"
             height="480"
             src={`https://www.youtube.com/embed/${
@@ -91,22 +95,13 @@ class Video extends React.Component {
             }`}
             frameBorder="0"
             allowFullScreen
-          />
+          /> */}
         </div>
-      ) : (
-        <div>
-          <iframe
-            width="853"
-            height="480"
-            src={`https://www.youtube.com/embed/${this.state.trailer.id.videoId}`}
-            frameBorder="0"
-            allowFullScreen
-          />
-        </div>
+       
       );
-    } else {
-      return null;
-    }
+    // } else {
+    //   return null;
+    // }
   }
 }
 //
