@@ -144,6 +144,7 @@ class MovieDescript extends React.Component {
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
+      draggablePercent: 60,
       draggable: true,
     });
   }
