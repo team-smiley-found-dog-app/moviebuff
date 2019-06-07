@@ -4,8 +4,16 @@ import axios from 'axios';
 // import { SpotifyApiContext } from "react-spotify-api";
 // import 'materialize-css';
 // import 'materialize-css/dist/css/materialize.min.css';
-import { spotify_api } from '../../../config.js'
+import { spotify_api } from '../../../config.js';
+import { AppBar, Button, Drawer } from '@material-ui/core/';
+import withStyles from '@material-ui/core/styles/withStyles';
 
+
+const styles = theme => ({
+  form: {
+    marginTop: theme.spacing(),
+  },
+});
 class Video extends React.Component {
   constructor(props) {
     super(props);
@@ -73,12 +81,15 @@ class Video extends React.Component {
 
   // search input field and button
   render() {
+    const btnStyle = {
+      margin: '20px',
+    }
     const { album } = this.state;
     console.log(album, 'spotify album from state');
     // if (this.state.trailer) {
       return (
         <div>
-          <a href={album} target="_blank" >Click for Playlist</a>
+          <a href={album} target="_blank" ><Button style={btnStyle} type="button" variant="contained" color="primary">Click for Soundtrack</Button></a>
             {/* <iframe
               src={`${album}`}
               width="250"
@@ -105,7 +116,7 @@ class Video extends React.Component {
   }
 }
 //
-export default Video;
+export default withStyles(styles)(Video);
 
 // // youtube video embed
 // const Video = (props) => (
