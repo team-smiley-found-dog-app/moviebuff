@@ -38,7 +38,7 @@ class Video extends React.Component {
       .get(`https://api.spotify.com/v1/search?q=${this.props.movie.title}&type=album&market=US&limit=1`,
         {
           headers: {
-            'Authorization': 'Bearer BQDXCYclA4suxhNt4RxIMdqp0Woxe7pljrY2_qveiIjt4x7sz8IIUhSSmHE_2qE5AF9Qa8bOlqHY1d1WnjP9XLUW1Vyxiejt8f0x9_xO8pQDuFK6gWUNWbdE6yVjRsDw53oKoQl2L6LnIdvAcg'
+            'Authorization': 'Bearer BQBEJXJOSrNdtOnSUuzE4dts7-W7O_fZL7UT3eT2es1MU4xArKdcBKrEeQdh28kWbsNuxmTscHTp4ZvAy8sUtXV4Lu4D7ZnPwMxaLYkCWcuz_3gfj6nyhjPu9PUSyLDanisbAxyy2HBm_g3waA'
           },
         })
       .then((res) => {
@@ -71,12 +71,13 @@ class Video extends React.Component {
 
   // search input field and button
   render() {
-    console.log(this.state.album)
+    console.log(this.state.album, 'album')
+    console.log(this.state.trailer, 'trailer');
     if (this.state.trailer) {
       return this.state.album ? (
         <div>
             <iframe
-              src={`${this.state.album.items[0].external_urls.spotify}`}
+              src={`${this.state.album.albums.items[0].external_urls.spotify}`}
               width="250"
               height="80"
               frameborder="0"
@@ -105,7 +106,7 @@ class Video extends React.Component {
         </div>
       );
     } else {
-      return null;
+      return <div>HEEEEEYYYYYY</div>;
     }
   }
 }
