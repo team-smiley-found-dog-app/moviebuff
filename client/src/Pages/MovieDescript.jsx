@@ -101,21 +101,21 @@ class MovieDescript extends React.Component {
       //axios post to server
       const url = `http://data.tmsapi.com/v1.1/movies/showings?startDate=${date}&zip=${zipCode}&api_key=${SHOWTIME_API}`;
       // let output;
-      let inTheatres = false;
       axios.get(url).then((showtimes) => {
+        let inTheatres = false;
         showtimes.data.forEach((showtime) => {
           if (showtime.title === movieName) {
-            console.log(showtime, 'showtime');
             inTheatres = true;
+            console.log(inTheatres, 'showtimes');
             this.setState({
               showtimes: showtime,
             });
           }
         });
+        if(inTheatres === false) {
+          this.inValidMovie(movieName);
+        }
       });
-      if(inTheatres === false) {
-        this.inValidMovie(movieName);
-      }
     }
 
   // when this component is rendered, get reviews
@@ -310,6 +310,11 @@ class MovieDescript extends React.Component {
                     <br />
                     <Video movie={movie} />
                     <br />
+                    <Box m={1} display="flex" flexDirection="row">
+                      <Typography>
+                        Please fill out the form below to view showtimes
+                      </Typography>
+                    </Box>
                     <Box m={2} display="flex" flexDirection="row">
                       <Typography>
                         YYYY-MM-DD <input type="text" value={date} onChange={this.handleDate} />
