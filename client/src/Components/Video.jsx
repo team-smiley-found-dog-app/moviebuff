@@ -4,11 +4,21 @@ import axios from 'axios';
 // import { SpotifyApiContext } from "react-spotify-api";
 // import 'materialize-css';
 // import 'materialize-css/dist/css/materialize.min.css';
+import { spotify_api } from '../../../config.js';
+import { AppBar, Button, Drawer } from '@material-ui/core/';
+import withStyles from '@material-ui/core/styles/withStyles';
 
+
+const styles = theme => ({
+  form: {
+    marginTop: theme.spacing(),
+  },
+});
 class Video extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      trailer: null,
       album: null,
     };
 
@@ -38,7 +48,7 @@ class Video extends React.Component {
       .get(`https://api.spotify.com/v1/search?q=${this.props.movie.title}&type=album&market=US&limit=1`,
         {
           headers: {
-            'Authorization': 'Bearer BQBEJXJOSrNdtOnSUuzE4dts7-W7O_fZL7UT3eT2es1MU4xArKdcBKrEeQdh28kWbsNuxmTscHTp4ZvAy8sUtXV4Lu4D7ZnPwMxaLYkCWcuz_3gfj6nyhjPu9PUSyLDanisbAxyy2HBm_g3waA'
+            Authorization: spotify_api,
           },
         })
       .then((res) => {
@@ -61,8 +71,8 @@ class Video extends React.Component {
       });
     this.getSoundtrack()
       .then((album) => {
-        console.log(album, "get");
-        this.setState({ album: album });
+        console.log(album.albums.items[0].external_urls.spotify, "get");
+        this.setState({ album: album.albums.items[0].external_urls.spotify });
       })
       .catch((err) => {
         console.error(err);
@@ -71,20 +81,24 @@ class Video extends React.Component {
 
   // search input field and button
   render() {
-    console.log(this.state.album, 'album')
-    console.log(this.state.trailer, 'trailer');
-    if (this.state.trailer) {
-      return this.state.album ? (
+    const btnStyle = {
+      margin: '20px',
+    }
+    const { album } = this.state;
+    console.log(album, 'spotify album from state');
+    // if (this.state.trailer) {
+      return (
         <div>
-            <iframe
-              src={`${this.state.album.albums.items[0].external_urls.spotify}`}
+          <a href={album} target="_blank" ><Button style={btnStyle} type="button" variant="contained" color="primary">Click for Soundtrack</Button></a>
+            {/* <iframe
+              src={`${album}`}
               width="250"
               height="80"
               frameborder="0"
               allowtransparency="true"
               allow="encrypted-media"
-            />
-          <iframe
+            /> */}
+          {/* <iframe
             width="853"
             height="480"
             src={`https://www.youtube.com/embed/${
@@ -92,26 +106,17 @@ class Video extends React.Component {
             }`}
             frameBorder="0"
             allowFullScreen
-          />
+          /> */}
         </div>
-      ) : (
-        <div>
-          <iframe
-            width="853"
-            height="480"
-            src={`https://www.youtube.com/embed/${this.state.trailer.id.videoId}`}
-            frameBorder="0"
-            allowFullScreen
-          />
-        </div>
+       
       );
-    } else {
-      return <div>HEEEEEYYYYYY</div>;
-    }
+    // } else {
+    //   return null;
+    // }
   }
 }
 //
-export default Video;
+export default withStyles(styles)(Video);
 
 // // youtube video embed
 // const Video = (props) => (

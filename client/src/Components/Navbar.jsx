@@ -72,6 +72,7 @@ export default class Navbar extends Component {
                   variant="contained"
                   color="default"
                   onClick={onToggleDark}>
+                    Toggle Night Mode
                 </Button>
 
               </Drawer>
