@@ -29,15 +29,13 @@ export default class Navbar extends Component {
     this.setState({ open: false });
   };
   
-  
   render() {
     const { open } = this.state;
+    const { onToggleDark } = this.props;
     return (
-      <MuiThemeProvider >
         <div>
           <AppBar position="static">
             <Toolbar variant="dense">
-
               <div>
                 <IconButton
                   aria-label="Menu"
@@ -46,41 +44,41 @@ export default class Navbar extends Component {
                   <SortIcon />
                 </IconButton>
               </div>
-              
+
               <div>
                 <Typography variant="h5" color="inherit">
-                  Welcome, {this.props.user.displayName}
+                  {/* Welcome, {this.props.user.displayName} */}
                 </Typography>
               </div>
 
-              <Drawer
-                variant="persistent"
-                anchor="left"
-                open={open}
-              >
+              <Drawer variant="persistent" anchor="left" open={open}>
                 <div>
-                  <IconButton onClick={this.handleDrawerClose} >
+                  <IconButton onClick={this.handleDrawerClose}>
                     <FormatIndentIcon />
                   </IconButton>
                 </div>
 
-                
                 <Button onClick={this.props.logoutClick}>Log Out</Button>
-                
+
                 <Button onClick={this.props.goHome}>Home</Button>
-                
-                <Button onClick={this.props.viewWatchlist}>View Watchlist</Button>
+
+                <Button onClick={this.props.viewWatchlist}>
+                  View Watchlist
+                </Button>
 
                 <Button onClick={this.props.tvShow}>TV Shows</Button>
-      
+
+                <Button
+                  variant="contained"
+                  color="default"
+                  onClick={onToggleDark}>
+                </Button>
+
               </Drawer>
             </Toolbar>
           </AppBar>
-          
         </div>
-      </MuiThemeProvider>
-    )
+    );
   }
 }
-
 

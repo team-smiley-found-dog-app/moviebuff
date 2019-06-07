@@ -6,8 +6,12 @@ import axios from 'axios';
 // import { Route, Switch } from 'react-router-dom';
 // import { BrowserRouter } from 'react-router-dom';
 // import '../App.css';
+import CssBaseline from "@material-ui/core/CssBaseline"
+import Navbar from './Components/Navbar.jsx'
+import LoginCard from './Components/LoginCard.jsx'
 import LoginCard from './Components/LoginCard.jsx';
 import Main from './Pages/Main.jsx';
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 // import MovieDescript from './Pages/MovieDescript.jsx';
 // import UserAccount from './Pages/UserAccount.jsx';
 // import SearchResults from './Pages/SearchResults.jsx';
@@ -24,9 +28,32 @@ class App extends React.Component {
       user: null,
       users: [],
       isLoggedIn: false,
+      theme: { palette: { type: "light" } },
     };
+
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
+    this.onToggleDark = this.onToggleDark.bind(this);
+  }
+
+ onToggleDark() {
+   console.log(this.state.theme)
+  let newPaletteType = this.state.theme.palette.type === "light" ? "dark" : "light";
+  // console.log(newpaletteType);
+  this.setState({ theme: { palette: { type: newPaletteType } } });
+} 
+
+  login() {
+    auth
+      .signInWithPopup(provider)
+      .then(result => {
+        this.setState({
+          user: result.user
+        });
+      })
+      .then(() => {
+        axios.post("/users", {
+          user: this.state.user
   }
 
   login() {
@@ -51,7 +78,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(user => {
       if (user) {
         this.setState({ user });
       }
@@ -60,23 +87,22 @@ class App extends React.Component {
 
   render() {
     const appStyle = {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     };
-
+const muiTheme = createMuiTheme(this.state.theme);
     return (
-      <div style={appStyle}>
-        {
-            !this.state.user ? <LoginCard loginClick={this.login} />
-              : (
-<Main 
-  user={this.state.user} 
-  logoutClick={this.logout} 
-                />
-)
-          }
+      <MuiThemeProvider theme={muiTheme}>
+      <CssBaseline/>
+      <div style={appStyle} >
+        {!this.state.user ? (
+          <LoginCard loginClick={this.login} />
+        ) : (
+          <Main onToggleDark={this.onToggleDark} user={this.state.user} logoutClick={this.logout}  />
+        )}
       </div>
+      </MuiThemeProvider>
     );
   }
 }
@@ -91,5 +117,4 @@ class App extends React.Component {
 //     </Switch>
 //   </div>
 // )
-
 ReactDOM.render(<App />, document.getElementById('app'));
