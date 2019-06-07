@@ -23,6 +23,7 @@ import Video from '../Components/Video.jsx';
 import { SHOWTIME_API } from '../../../config.js';
 import Showtimes from '../Components/Showtimes.jsx';
 import 'react-toastify/dist/ReactToastify.css';
+import { css } from 'glamor';
 
 const styles = theme => ({
   form: {
@@ -146,6 +147,12 @@ class MovieDescript extends React.Component {
       pauseOnHover: true,
       draggablePercent: 60,
       draggable: true,
+      className: css({
+        background: 'blue'
+      }),
+      // progressClassName: css({
+      //   background: "repeating-radial-gradient(circle at center, red 0, blue, green 30px)"
+      // })
     });
   }
   
