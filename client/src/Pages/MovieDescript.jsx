@@ -50,6 +50,7 @@ class MovieDescript extends React.Component {
     this.handleZip = this.handleZip.bind(this);
     this.handleShowtimes = this.handleShowtimes.bind(this);
     this.notify = this.notify.bind(this);
+    this.inValidMovie = this.inValidMovie.bind(this);
   }
 
   // handle getting reviews for a movie when it is clicked
@@ -77,22 +78,44 @@ class MovieDescript extends React.Component {
         zip: e.target.value
       })
     }
-
+    inValidMovie(title) {
+      return toast(`Sorry, ${title} is not in theatres`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggablePercent: 60,
+          draggable: true,
+          className: css({
+            background: 'blue'
+          }),
+          // progressClassName: css({
+          //   background: "repeating-radial-gradient(circle at center, red 0, blue, green 30px)"
+          // })
+        
+      });
+    }
     //showtime click handler. takes date and zip code
     handleShowtimes(movieName, date, zipCode) {
       //axios post to server
       const url = `http://data.tmsapi.com/v1.1/movies/showings?startDate=${date}&zip=${zipCode}&api_key=${SHOWTIME_API}`;
       // let output;
+      let inTheatres = false;
       axios.get(url).then((showtimes) => {
         showtimes.data.forEach((showtime) => {
           if (showtime.title === movieName) {
             console.log(showtime, 'showtime');
+            inTheatres = true;
             this.setState({
               showtimes: showtime,
             });
           }
         });
       });
+      if(inTheatres === false) {
+        this.inValidMovie(movieName);
+      }
     }
 
   // when this component is rendered, get reviews
