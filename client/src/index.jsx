@@ -9,7 +9,7 @@ import axios from 'axios';
 import CssBaseline from "@material-ui/core/CssBaseline"
 import Navbar from './Components/Navbar.jsx'
 import LoginCard from './Components/LoginCard.jsx'
-import LoginCard from './Components/LoginCard.jsx';
+// import LoginCard from './Components/LoginCard.jsx';
 import Main from './Pages/Main.jsx';
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 // import MovieDescript from './Pages/MovieDescript.jsx';
@@ -54,20 +54,22 @@ class App extends React.Component {
       .then(() => {
         axios.post("/users", {
           user: this.state.user
-  }
-
-  login() {
-    auth.signInWithPopup(provider).then((result) => {
-      this.setState({
-        user: result.user,
-      });
-    })
-      .then(() => {
-        axios.post('/users', {
-          user: this.state.user,
         });
       });
   }
+
+  // login() {
+  //   auth.signInWithPopup(provider).then((result) => {
+  //     this.setState({
+  //       user: result.user,
+  //     });
+  //   })
+  //     .then(() => {
+  //       axios.post('/users', {
+  //         user: this.state.user,
+  //       });
+  //     });
+  // }
 
   logout() {
     auth.signOut().then(() => {
