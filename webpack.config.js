@@ -11,8 +11,22 @@ module.exports = {
     rules: [{
       test: /\.jsx$/,
       exclude: /node_modules/,
-      loader: 'babel-loader'
-    }]
+      loader: 'babel-loader',
+    },
+    {
+      test: /\.s?css$/,
+      use: [
+        {
+          loader: 'style-loader',
+        },
+        {
+          loader: 'css-loader',
+        },
+        {
+          loader: 'sass-loader',
+        },
+      ],
+    }],
   },
   devtool: 'inline-source-map',
   output: {

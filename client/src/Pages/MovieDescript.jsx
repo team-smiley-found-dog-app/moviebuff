@@ -17,10 +17,12 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import withStyles from '@material-ui/core/styles/withStyles'
 // import '../../App.css';
+import { ToastContainer, toast } from 'react-toastify';
 import ReviewList from '../Components/ReviewList.jsx';
 import Video from '../Components/Video.jsx';
 import { SHOWTIME_API } from '../../../config.js';
 import Showtimes from '../Components/Showtimes.jsx';
+import 'react-toastify/dist/ReactToastify.css';
 
 const styles = theme => ({
   form: {
@@ -46,6 +48,7 @@ class MovieDescript extends React.Component {
     this.handleDate = this.handleDate.bind(this);
     this.handleZip = this.handleZip.bind(this);
     this.handleShowtimes = this.handleShowtimes.bind(this);
+    this.notify = this.notify.bind(this);
   }
 
   // handle getting reviews for a movie when it is clicked
@@ -133,8 +136,21 @@ class MovieDescript extends React.Component {
     this.handleVote(-1);
   }
 
+  notify(title) {
+    console.log('hitting toast');
+    return toast(`${title} added to watchlist!`, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  }
+  
   addToList() {
     const { movie } = this.props;
+    this.notify(movie.title);
     return axios.post('/movies', {
       title: movie.title,
       overview: movie.overview,
@@ -155,6 +171,9 @@ class MovieDescript extends React.Component {
       //get request to database
         //re set showtimes state to showtimes retrieved from database
   // show detailed info about movie and reviews about movie
+
+  
+
   render() {
     const appStyle = {
       display: 'flex',
@@ -255,6 +274,7 @@ class MovieDescript extends React.Component {
                       <h5 m={2}>{this.state.userVotes}</h5>
                       <Button style={btnStyle} onClick={this.downvote} variant="contained" color="primary">Downvote</Button>
                       <Button style={btnStyle} onClick={this.addToList} variant="contained" color="primary">Add to Watchlist</Button>
+                      <ToastContainer />
                     </Box>
                     <br />
                     <Video movie={movie} />

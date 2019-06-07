@@ -6,7 +6,6 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const { testDb } = require('../database/test.js');
-//git st
 const { // pull all backend helper functions for server and database interaction
   getMovie,
   getPopular,

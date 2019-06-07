@@ -10,9 +10,7 @@ sequelize.authenticate()
   .then(() => console.log('Connected to the database'))
   .catch(err => console.error('Could not connect to the database', err));
 
-
-
-//make showtimes model schema
+// make showtimes model schema
 
 const Show = sequelize.define('show', {
   name: {
