@@ -21,7 +21,7 @@ class Main extends React.Component {
       movies: [],
       search: "",
       movie: null,
-      theme: { palette: { type: "light" } },
+      // theme: { palette: { type: "light" } },
     };
 
     this.getNowPlayingMovies = this.getNowPlayingMovies.bind(this);
@@ -33,14 +33,14 @@ class Main extends React.Component {
     this.gettvShows = this.gettvShows.bind(this);
     this.tvShow = this.tvShow.bind(this);
     this.getSearchedShows = this.getSearchedShows.bind(this);
-    this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
+    // this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
   }
 
-toggleDarkTheme() {
-  let newPaletteType = this.state.theme.palette.type === "light" ? "dark" : "light";
-  // console.log(newpaletteType);
-  this.setState({ theme: { palette: { type: newPaletteType } } });
-} 
+// toggleDarkTheme() {
+//   let newPaletteType = this.state.theme.palette.type === "light" ? "dark" : "light";
+//   // console.log(newpaletteType);
+//   this.setState({ theme: { palette: { type: newPaletteType } } });
+// } 
 
   // handle request for movies playing in theatres now
 getNowPlayingMovies() {
@@ -173,12 +173,13 @@ getNowPlayingMovies() {
 
   render() {
 console.log(this.state.theme)
-const muiTheme = createMuiTheme(this.state.theme);
+// const muiTheme = createMuiTheme(this.state.theme);
+const { onToggleDark } = this.props
     return this.state.movie ? ( // show a movie's details when it is clicked
-      <MuiThemeProvider theme={muiTheme}>
+      // <MuiThemeProvider theme={muiTheme}>
         <div>
           <Navbar
-            onToggleDark={this.onToggleDark}
+            onToggleDark={onToggleDark}
             logoutClick={this.props.logoutClick}
             goHome={this.goHome}
             viewWatchlist={this.viewWatchlist}
@@ -196,12 +197,12 @@ const muiTheme = createMuiTheme(this.state.theme);
             </Box>
           </div>
         </div>
-      </MuiThemeProvider>
+      // </MuiThemeProvider>
     ) : (
-      <MuiThemeProvider theme={muiTheme}>
+      // <MuiThemeProvider theme={muiTheme}>
         <div>
           <Navbar
-            onToggleDark={this.toggleDarkTheme}
+            onToggleDark={onToggleDark}
             logoutClick={this.props.logoutClick}
             goHome={this.goHome}
             viewWatchlist={this.viewWatchlist}
@@ -218,7 +219,7 @@ const muiTheme = createMuiTheme(this.state.theme);
             </Box>
           </div>
         </div>
-      </MuiThemeProvider>
+      // </MuiThemeProvider>
     );
   }
 }

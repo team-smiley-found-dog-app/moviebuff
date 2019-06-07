@@ -8,10 +8,12 @@ import axios from 'axios';
 class Video extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      album: null,
+    };
 
     this.getTrailer = this.getTrailer.bind(this);
-    // this.getSoundtrack = this.getSoundtrack.bind(this);
+    this.getSoundtrack = this.getSoundtrack.bind(this);
   }
 
   getTrailer() {
@@ -31,29 +33,22 @@ class Video extends React.Component {
 
 
   // get url for soundtrack to plugin to player
-  // getSoundtrack() {
-  //   return axios
-  //     .get(
-  //       `https://api.spotify.com/v1/search?q=${
-  //         this.props.movie.title
-  //       }&type=album&market=US&limit=1"`, 
-  //       { 
-  //       headers: { 
-  //       "Accept": "application/json",
-  //       "Content-Type": "application/json",
-  //       "Authorization": "Bearer BQAgTPkVZh8ZBgZNkeVbincPBJAvRpv0335EuJMoAc2swf6rd3GPohTRRJsYvJZ0s-e8O_sdCiNY61tQRJQcRrYiF_HMv3MOqCjyC8ry3CzNmcspdhATMAdp9oZUjoCaq_Y9wCwei4v5T1Sivg"
-  //       }  
-  //       params: { title: this.props.movie.title }
-  //       }
-  //     )
-  //     .then(res => {
-  //       console.log(res);
-  //       return res.data;
-  //     })
-  //     .catch(err => {
-  //       console.error(err);
-  //     });
-  // }
+  getSoundtrack() {
+    return axios
+      .get(`https://api.spotify.com/v1/search?q=${this.props.movie.title}&type=album&market=US&limit=1`,
+        {
+          headers: {
+            'Authorization': 'Bearer BQDXCYclA4suxhNt4RxIMdqp0Woxe7pljrY2_qveiIjt4x7sz8IIUhSSmHE_2qE5AF9Qa8bOlqHY1d1WnjP9XLUW1Vyxiejt8f0x9_xO8pQDuFK6gWUNWbdE6yVjRsDw53oKoQl2L6LnIdvAcg'
+          },
+        })
+      .then((res) => {
+        console.log(res, "sound");
+        return res.data;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
   componentDidMount(e) {
     this.getTrailer()
@@ -64,38 +59,46 @@ class Video extends React.Component {
       .catch((err) => {
         console.error(err);
       });
-    }
-  //   this.getSoundtrack()
-  //     .then((album) => {
-  //       console.log(album);
-  //       this.setState({ album: album });
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // }
+    this.getSoundtrack()
+      .then((album) => {
+        console.log(album, "get");
+        this.setState({ album: album });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
   // search input field and button
   render() {
+    console.log(this.state.album)
     if (this.state.trailer) {
-      return (
+      return this.state.album ? (
         <div>
-          <center>
             <iframe
-              src="https://open.spotify.com/album/75WkxmnBfOthJzbYwruqOV"
+              src={`${this.state.album.items[0].external_urls.spotify}`}
               width="250"
               height="80"
               frameborder="0"
               allowtransparency="true"
               allow="encrypted-media"
             />
-          </center>
           <iframe
             width="853"
             height="480"
             src={`https://www.youtube.com/embed/${
               this.state.trailer.id.videoId
             }`}
+            frameBorder="0"
+            allowFullScreen
+          />
+        </div>
+      ) : (
+        <div>
+          <iframe
+            width="853"
+            height="480"
+            src={`https://www.youtube.com/embed/${this.state.trailer.id.videoId}`}
             frameBorder="0"
             allowFullScreen
           />

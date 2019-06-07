@@ -72,7 +72,6 @@ export default class Navbar extends Component {
                   variant="contained"
                   color="default"
                   onClick={onToggleDark}>
-                    Toggle Theme Type
                 </Button>
 
               </Drawer>

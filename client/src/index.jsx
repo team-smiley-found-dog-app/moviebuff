@@ -6,6 +6,8 @@ import axios from 'axios';
 // import { Route, Switch } from 'react-router-dom';
 // import { BrowserRouter } from 'react-router-dom';
 // import '../App.css';
+import CssBaseline from "@material-ui/core/CssBaseline"
+import Navbar from './Components/Navbar.jsx'
 import LoginCard from './Components/LoginCard.jsx'
 import Main from './Pages/Main.jsx';
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
@@ -25,26 +27,20 @@ class App extends React.Component {
       user: null,
       users: [],
       isLoggedIn: false,
-      theme: {
-        palette: {
-          canvasColor: "rgba(0, 0, 0, 0.87)"
-        }
-      }
+      theme: { palette: { type: "light" } },
     };
 
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
-    this.toggleDark = this.toggleDark.bind(this);
+    this.onToggleDark = this.onToggleDark.bind(this);
   }
 
-  toggleDark() {
-    let newPaletteType =
-      this.state.theme.palette.type === "light"
-        ? "rgba(0, 0, 0, 0.87)"
-        : "rgba(255, 255, 255, 0.3)";
+ onToggleDark() {
+   console.log(this.state.theme)
+  let newPaletteType = this.state.theme.palette.type === "light" ? "dark" : "light";
   // console.log(newpaletteType);
-    this.setState({ theme: { palette: { canvasColor: newPaletteType } }});
-  }
+  this.setState({ theme: { palette: { type: newPaletteType } } });
+} 
 
   login() {
     auth
@@ -81,20 +77,20 @@ class App extends React.Component {
     const appStyle = {
       display: "flex",
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
     };
 const muiTheme = createMuiTheme(this.state.theme);
     return (
-      <div style={appStyle}>
+      <MuiThemeProvider theme={muiTheme}>
+      <CssBaseline/>
+      <div style={appStyle} >
         {!this.state.user ? (
           <LoginCard loginClick={this.login} />
         ) : (
-          <MuiThemeProvider theme={muiTheme}>
-          <Main user={this.state.user} logoutClick={this.logout} />
-          <Navbar onToggleDark={this.onToggleDark}/>
-          </MuiThemeProvider>
+          <Main onToggleDark={this.onToggleDark} user={this.state.user} logoutClick={this.logout}  />
         )}
       </div>
+      </MuiThemeProvider>
     );
   }
 }
