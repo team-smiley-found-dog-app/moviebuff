@@ -64,7 +64,7 @@ class Video extends React.Component {
     this.getSoundtrack()
       .then((album) => {
         console.log(album.albums.items[0].external_urls.spotify, "get");
-        this.setState({ album: album.albums.items[0].uri });
+        this.setState({ album: album.albums.items[0].external_urls.spotify });
       })
       .catch((err) => {
         console.error(err);
@@ -78,15 +78,15 @@ class Video extends React.Component {
     // if (this.state.trailer) {
       return (
         <div>
-          {/* <a href={album} target="_blank" >Click for Playlist</a> */}
-            <iframe
+          <a href={album} target="_blank" >Click for Playlist</a>
+            {/* <iframe
               src={`${album}`}
               width="250"
               height="80"
               frameborder="0"
               allowtransparency="true"
               allow="encrypted-media"
-            />
+            /> */}
           {/* <iframe
             width="853"
             height="480"
