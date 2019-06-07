@@ -79,7 +79,7 @@ class MovieDescript extends React.Component {
       })
     }
     inValidMovie(title) {
-      return toast(`Sorry, ${title} is not in theatres`, {
+      return toast(`😞 Sorry, ${title} is not in theatres`, {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -87,9 +87,9 @@ class MovieDescript extends React.Component {
           pauseOnHover: true,
           draggablePercent: 60,
           draggable: true,
-          className: css({
-            background: 'blue'
-          }),
+          // className: css({
+          //   background: 'red'
+          // }),
           // progressClassName: css({
           //   background: "repeating-radial-gradient(circle at center, red 0, blue, green 30px)"
           // })
@@ -162,7 +162,7 @@ class MovieDescript extends React.Component {
 
   notify(title) {
     console.log('hitting toast');
-    return toast(`${title} added to watchlist!`, {
+    return toast(`🎥 ${title} added to watchlist!`, {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -170,9 +170,9 @@ class MovieDescript extends React.Component {
       pauseOnHover: true,
       draggablePercent: 60,
       draggable: true,
-      className: css({
-        background: 'blue'
-      }),
+      // className: css({
+      //   background: 'blue'
+      // }),
       // progressClassName: css({
       //   background: "repeating-radial-gradient(circle at center, red 0, blue, green 30px)"
       // })
@@ -181,7 +181,6 @@ class MovieDescript extends React.Component {
   
   addToList() {
     const { movie } = this.props;
-    this.notify(movie.title);
     return axios.post('/movies', {
       title: movie.title,
       overview: movie.overview,
@@ -190,12 +189,13 @@ class MovieDescript extends React.Component {
       vote_average: movie.voteAvg,
       email: this.props.user.email,
     })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    .then((res) => {
+      console.log(res);
+      this.notify(movie.title);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   }
   //create function that triggers post request to store showtimes in database
     //axios.post to endpoint
