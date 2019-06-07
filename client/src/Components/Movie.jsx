@@ -25,7 +25,7 @@ class Movie extends React.Component {
     
     return (
       //psuedocode
-      <div>
+      <div style={{"zIndex": "100"}}>
         <Parallax onClick={this.handleSelect} options={ {responsiveThreshold: 3} } image={<img src={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`} alt="" />} />
         <div className="section blue">
           <div className="row container">
