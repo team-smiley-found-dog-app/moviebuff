@@ -12,15 +12,9 @@ class Showtimes extends React.Component {
     const { shows } = this.props;
     console.log(shows, 'props');
     return (
-        shows.showtimes ? shows.showtimes.map(showtime => <Showtime show={showtime}/>) : (
-          <div>
-            <Box m={2} display="flex" flexDirection="row">
-              <Typography gutterBottom variant="h5" component="h2">
-                Sorry. This film is not yet in theatres
-              </Typography>
-            </Box>
-          </div>
-        )      
+        <div>
+          {shows.showtimes && shows.showtimes.map(showtime => <Showtime show={showtime}/>)}
+        </div>
     )
   }
 }

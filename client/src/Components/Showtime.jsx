@@ -25,7 +25,7 @@ class Showtime extends React.Component {
         </Box>
         <Box m={2} display="flex" flexDirection="row">
           <Typography gutterBottom variant="h5" component="h2">
-            <a href={show.ticketURI}>Tickets</a>
+            <a href={show.ticketURI} target="_blank">Tickets</a>
           </Typography>
         </Box>
       </div>

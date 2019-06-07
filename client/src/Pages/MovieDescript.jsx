@@ -17,10 +17,13 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import withStyles from '@material-ui/core/styles/withStyles'
 // import '../../App.css';
+import { ToastContainer, toast } from 'react-toastify';
 import ReviewList from '../Components/ReviewList.jsx';
 import Video from '../Components/Video.jsx';
 import { SHOWTIME_API } from '../../../config.js';
 import Showtimes from '../Components/Showtimes.jsx';
+import 'react-toastify/dist/ReactToastify.css';
+import { css } from 'glamor';
 
 const styles = theme => ({
   form: {
@@ -46,6 +49,8 @@ class MovieDescript extends React.Component {
     this.handleDate = this.handleDate.bind(this);
     this.handleZip = this.handleZip.bind(this);
     this.handleShowtimes = this.handleShowtimes.bind(this);
+    this.notify = this.notify.bind(this);
+    this.inValidMovie = this.inValidMovie.bind(this);
   }
 
   // handle getting reviews for a movie when it is clicked
@@ -73,21 +78,43 @@ class MovieDescript extends React.Component {
         zip: e.target.value
       })
     }
-
+    inValidMovie(title) {
+      return toast(`😞 Sorry, ${title} is not in theatres`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggablePercent: 60,
+          draggable: true,
+          // className: css({
+          //   background: 'red'
+          // }),
+          // progressClassName: css({
+          //   background: "repeating-radial-gradient(circle at center, red 0, blue, green 30px)"
+          // })
+        
+      });
+    }
     //showtime click handler. takes date and zip code
     handleShowtimes(movieName, date, zipCode) {
       //axios post to server
       const url = `http://data.tmsapi.com/v1.1/movies/showings?startDate=${date}&zip=${zipCode}&api_key=${SHOWTIME_API}`;
       // let output;
       axios.get(url).then((showtimes) => {
+        let inTheatres = false;
         showtimes.data.forEach((showtime) => {
           if (showtime.title === movieName) {
-            console.log(showtime, 'showtime');
+            inTheatres = true;
+            console.log(inTheatres, 'showtimes');
             this.setState({
               showtimes: showtime,
             });
           }
         });
+        if(inTheatres === false) {
+          this.inValidMovie(movieName);
+        }
       });
     }
 
@@ -133,6 +160,25 @@ class MovieDescript extends React.Component {
     this.handleVote(-1);
   }
 
+  notify(title) {
+    console.log('hitting toast');
+    return toast(`🎥 ${title} added to watchlist!`, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggablePercent: 60,
+      draggable: true,
+      // className: css({
+      //   background: 'blue'
+      // }),
+      // progressClassName: css({
+      //   background: "repeating-radial-gradient(circle at center, red 0, blue, green 30px)"
+      // })
+    });
+  }
+  
   addToList() {
     const { movie } = this.props;
     return axios.post('/movies', {
@@ -143,18 +189,22 @@ class MovieDescript extends React.Component {
       vote_average: movie.voteAvg,
       email: this.props.user.email,
     })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    .then((res) => {
+      console.log(res);
+      this.notify(movie.title);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   }
   //create function that triggers post request to store showtimes in database
     //axios.post to endpoint
       //get request to database
         //re set showtimes state to showtimes retrieved from database
   // show detailed info about movie and reviews about movie
+
+  
+
   render() {
     const appStyle = {
       display: 'flex',
@@ -255,10 +305,16 @@ class MovieDescript extends React.Component {
                       <h5 m={2}>{this.state.userVotes}</h5>
                       <Button style={btnStyle} onClick={this.downvote} variant="contained" color="primary">Downvote</Button>
                       <Button style={btnStyle} onClick={this.addToList} variant="contained" color="primary">Add to Watchlist</Button>
+                      <ToastContainer />
                     </Box>
                     <br />
                     <Video movie={movie} />
                     <br />
+                    <Box m={1} display="flex" flexDirection="row">
+                      <Typography>
+                        Please fill out the form below to view showtimes
+                      </Typography>
+                    </Box>
                     <Box m={2} display="flex" flexDirection="row">
                       <Typography>
                         YYYY-MM-DD <input type="text" value={date} onChange={this.handleDate} />
