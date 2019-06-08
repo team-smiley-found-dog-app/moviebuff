@@ -83,13 +83,15 @@ class Video extends React.Component {
   render() {
     const btnStyle = {
       margin: '20px',
+      justifyContent: 'center',
     }
     const { album } = this.state;
     console.log(album, 'spotify album from state');
-    // if (this.state.trailer) {
+    if (this.state.trailer) {
       return (
-        <div>
-          <a href={album} target="_blank" ><Button style={btnStyle} type="button" variant="contained" color="primary">Click for Soundtrack</Button></a>
+        <div> 
+              <a href={album} target="_blank" ><Button style={btnStyle} type="button" variant="contained" color="primary">Click for Soundtrack</Button></a>
+
             {/* <iframe
               src={`${album}`}
               width="250"
@@ -98,7 +100,7 @@ class Video extends React.Component {
               allowtransparency="true"
               allow="encrypted-media"
             /> */}
-          {/* <iframe
+          <iframe
             width="853"
             height="480"
             src={`https://www.youtube.com/embed/${
@@ -106,13 +108,17 @@ class Video extends React.Component {
             }`}
             frameBorder="0"
             allowFullScreen
-          /> */}
+          />
         </div>
        
       );
-    // } else {
-    //   return null;
-    // }
+    } else {
+        return (  <div>
+              <a href={album} target="_blank" ><Button style={btnStyle} type="button" variant="contained" color="primary">Click for Soundtrack</Button></a>
+          </div>
+        )
+      // return null;
+    }
   }
 }
 //
