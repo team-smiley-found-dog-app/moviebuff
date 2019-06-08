@@ -86,7 +86,7 @@ class Video extends React.Component {
       justifyContent: 'center',
     }
     const { album } = this.state;
-    console.log(album, 'spotify album from state');
+    console.log(album, 'spotify');
     if (this.state.trailer) {
       return (
         <div> 
