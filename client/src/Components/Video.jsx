@@ -71,8 +71,8 @@ class Video extends React.Component {
       });
     this.getSoundtrack()
       .then((album) => {
-        console.log(album.albums.items[0].external_urls.spotify, "get");
-        this.setState({ album: album.albums.items[0].external_urls.spotify });
+        // console.log(album.albums.items[0].uri.substring(14), "get");
+        this.setState({ album: album.albums.items[0].uri.substring(14) });
       })
       .catch((err) => {
         console.error(err);
@@ -83,37 +83,34 @@ class Video extends React.Component {
   render() {
     const btnStyle = {
       margin: '20px',
+      justifyContent: 'center',
     }
     const { album } = this.state;
-    console.log(album, 'spotify album from state');
-    // if (this.state.trailer) {
+    console.log(album, 'spotify');
+    if (this.state.trailer) {
       return (
         <div>
-          <a href={album} target="_blank" ><Button style={btnStyle} type="button" variant="contained" color="primary">Click for Soundtrack</Button></a>
-            {/* <iframe
-              src={`${album}`}
+          {/* <a href={album} target="_blank" ><Button style={btnStyle} type="button" variant="contained" color="primary">Click for Soundtrack</Button></a> */}
+          <iframe
+            src={`https://open.spotify.com/embed/album/${album}`}
               width="250"
               height="80"
               frameborder="0"
               allowtransparency="true"
               allow="encrypted-media"
-            /> */}
-          {/* <iframe
+            /> 
+          <iframe
             width="853"
             height="480"
-            src={`https://www.youtube.com/embed/${
-              this.state.trailer.id.videoId
-            }`}
+            src={`https://www.youtube.com/embed/${this.state.trailer.id.videoId}`}
             frameBorder="0"
             allowFullScreen
-          /> */}
+          />
         </div>
-       
-      );
-    // } else {
-    //   return null;
-    // }
-  }
+      ) } else {
+    return null;
+      }
+}
 }
 //
 export default withStyles(styles)(Video);
